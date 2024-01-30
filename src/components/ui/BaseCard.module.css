@@ -1,0 +1,19 @@
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  padding: 1rem;
+  margin: 1rem auto;
+  background: var(--color3_1);
+}
+.white-BG {
+  background: var(--color1);
+}
+.warn {
+  animation: border-blink 2s linear infinite;
+  border: 0.3rem solid var(--color5);
+}
+@keyframes border-blink {
+  50% {
+    border: 0.3rem solid var(--color1);
+  }
+}

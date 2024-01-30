@@ -1,0 +1,17 @@
+div.form-control {
+  margin: 0.5rem 0;
+}
+label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.label-error {
+  color: var(--color5);
+  font-weight: lighter;
+}
+img {
+  display: block;
+  margin: 0.5rem auto;
+  width: 100%;
+}
