@@ -26,7 +26,7 @@ const common = {
 
 const error = {
   tr: {
-    'Please enter a valid value.': 'Lütfen geçerli bir değer giriniz',
+    'Please enter a valid value': 'Lütfen geçerli bir değer giriniz',
     'Failed to fetch': 'Sunucuya bağlanılamadı',
     'Password is not correct': 'Parola doğru değil',
     'An Error Occurred': 'Bir hata alındı',

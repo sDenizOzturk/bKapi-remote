@@ -1,7 +1,7 @@
 import classes from './Header.module.css';
 
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import routes from '../../utils/routes';
@@ -17,6 +17,7 @@ const languages = [
 
 const Header: FC = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const token = useSelector((state: RootState) => state.auth.token);
   const tokenValid = isTokenValid(token);
@@ -25,7 +26,6 @@ const Header: FC = () => {
   const defaultRoutes = [
     { to: routes.instructions.root, text: t('Instructions') },
   ];
-
   return (
     <header>
       <nav>
@@ -70,6 +70,7 @@ const Header: FC = () => {
                 onClick={() => {
                   i18n.changeLanguage(language.lang);
                   localStorage.setItem('language', language.lang);
+                  navigate(0);
                 }}
               >
                 {language.label}
