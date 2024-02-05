@@ -1,7 +1,9 @@
-import BaseCard from '../ui/BaseCard';
-import BaseWrapper from '../ui/BaseWrapper';
-import BaseFormInput from '../ui/form/BaseFormInput';
-import BaseButton from '../ui/BaseButton';
+import {
+  BaseWrapper,
+  BaseCard,
+  BaseButton,
+  BaseFormInput,
+} from 'binak-react-components';
 
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -81,8 +83,9 @@ const LogIn: FC = () => {
               minLength: 6,
               maxLength: 80,
             })}
+            errorMessage={t('Please enter a valid password')}
           />
-          <BaseWrapper mode="align-right">
+          <BaseWrapper mode={['align-right']}>
             <BaseButton type="submit">{t('Log In')}</BaseButton>
           </BaseWrapper>
         </form>

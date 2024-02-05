@@ -26,7 +26,6 @@ const common = {
 
 const error = {
   tr: {
-    'Please enter a valid value': 'Lütfen geçerli bir değer giriniz',
     'Failed to fetch': 'Sunucuya bağlanılamadı',
     'Password is not correct': 'Parola doğru değil',
     'An Error Occurred': 'Bir hata alındı',
@@ -40,7 +39,6 @@ const error = {
     'Not authenticated': 'Eşleştirme hatası',
   },
   ru: {
-    'Please enter a valid value': 'Пожалуйста, введите допустимое значение',
     'Failed to fetch': 'Не удалось получить',
     'Password is not correct': 'Пароль неправильный',
     'An Error Occurred': 'Произошла ошибка',
@@ -52,6 +50,28 @@ const error = {
     'Token Expired': 'Срок действия токена истек',
     'Key is not verified': 'Ключ не проверен',
     'Not authenticated': 'Не аутентифицирован',
+  },
+};
+
+const validation = {
+  tr: {
+    'Please enter a valid value': 'Lütfen geçerli bir değer giriniz',
+    'Please enter a valid door number':
+      'Lütfen geçerli bir kapı numarası giriniz',
+    'Please enter a valid password': 'Lütfen geçerli bir parola giriniz',
+    'Please enter a valid fullname': 'Lütfen geçerli bir isim soyad giriniz',
+    'Please enter a valid plate number':
+      'Lütfen geçerli bir plaka numarası giriniz',
+  },
+  ru: {
+    'Please enter a valid value': 'Пожалуйста, введите допустимое значение',
+    'Please enter a valid door number':
+      'Пожалуйста, введите действительный номер двери',
+    'Please enter a valid password': 'Пожалуйста, введите правильный пароль',
+    'Please enter a valid fullname':
+      'Пожалуйста, введите действительное полное имя',
+    'Please enter a valid plate number':
+      'Пожалуйста, введите действительный номерной знак',
   },
 };
 
@@ -135,6 +155,7 @@ const resources = {
     translation: {
       ...common.tr,
       ...error.tr,
+      ...validation.tr,
       ...admin.tr,
       ...resident.tr,
     },
@@ -143,6 +164,7 @@ const resources = {
     translation: {
       ...common.ru,
       ...error.ru,
+      ...validation.tr,
       ...admin.ru,
       ...resident.ru,
     },

@@ -1,7 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import BaseButton from '../../ui/BaseButton';
-import BaseModal from '../../ui/BaseModal';
-import BaseWrapper from '../../ui/BaseWrapper';
+import { BaseWrapper, BaseButton, BaseModal } from 'binak-react-components';
 import AddOrUpdatePlate from './AddOrUpdatePlate';
 import { useTranslation } from 'react-i18next';
 
@@ -85,8 +83,8 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
         />
       </BaseModal>
 
-      <BaseWrapper mode="vertical center">
-        <BaseWrapper mode="horizontal">
+      <BaseWrapper mode={['vertical', 'center']}>
+        <BaseWrapper mode={['horizontal']}>
           <h1>
             {plateType === 'own'
               ? t("Residents' Vehicles")
@@ -98,7 +96,7 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
         </BaseWrapper>
       </BaseWrapper>
 
-      <BaseWrapper mode="grid-2 center gap-2rem">
+      <BaseWrapper mode={['grid-2', 'center', 'gap-2rem']}>
         {plates.map((plate: Plate) => (
           <PlateItem
             whileHover={bounce.s.scale}

@@ -1,5 +1,5 @@
-const root = 'http://localhost:4000';
-//cconst root = 'https://antasya-sunucu.bkapi.site:8081';
+//const root = 'http://localhost:4000';
+const root = 'https://antasya-sunucu.bkapi.site:8081';
 
 const adminRoot = root + '/admin';
 const residentRoot = root + '/resident';

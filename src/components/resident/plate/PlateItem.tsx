@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Plate } from '../../../models/plate';
-import BaseCard from '../../ui/BaseCard';
-import BaseWrapper from '../../ui/BaseWrapper';
+import { BaseWrapper, BaseCard } from 'binak-react-components';
 import { HTMLMotionProps } from 'framer-motion';
 
 interface PlateItemProps extends HTMLMotionProps<'div'> {
@@ -16,7 +15,7 @@ const PlateItem: FC<PlateItemProps> = ({ plate, onPlateClicked, ...props }) => {
       style={{ width: '14rem', cursor: 'pointer' }}
       onClick={onPlateClicked}
     >
-      <BaseWrapper mode="center align-text-center ">
+      <BaseWrapper mode={['center', 'align-text-center']}>
         <h3 style={{ fontSize: '1.6rem' }}>{plate.plateNumber}</h3>
         <p style={{ fontSize: '1.3rem' }}>{plate.fullname}</p>
       </BaseWrapper>

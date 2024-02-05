@@ -1,7 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import BaseButton from '../../ui/BaseButton';
-import BaseModal from '../../ui/BaseModal';
-import BaseWrapper from '../../ui/BaseWrapper';
+import { BaseWrapper, BaseButton, BaseModal } from 'binak-react-components';
 import AddOrUpdateAppKey from './AddOrUpdateAppKey';
 import { useTranslation } from 'react-i18next';
 
@@ -81,8 +79,8 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
         />
       </BaseModal>
 
-      <BaseWrapper mode="vertical center">
-        <BaseWrapper mode="horizontal">
+      <BaseWrapper mode={['vertical', 'center']}>
+        <BaseWrapper mode={['horizontal']}>
           <h1>{t('Application Keys')}</h1>
           <BaseButton mode="outline" onClick={() => setShowAddAppKey(true)}>
             {t('Add')}
@@ -90,7 +88,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
         </BaseWrapper>
       </BaseWrapper>
 
-      <BaseWrapper mode="grid-2 center gap-2rem">
+      <BaseWrapper mode={['grid-2', 'center', 'gap-2rem']}>
         {appKeys.map((appKey: AppKey) => (
           <AppKeyItem
             whileHover={bounce.s.scale}

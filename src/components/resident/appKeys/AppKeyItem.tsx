@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import BaseCard from '../../ui/BaseCard';
-import BaseWrapper from '../../ui/BaseWrapper';
+import { BaseWrapper, BaseCard } from 'binak-react-components';
 import { AppKey } from '../../../models/appKey';
 import { HTMLMotionProps } from 'framer-motion';
 
@@ -20,7 +19,7 @@ const AppKeyItem: FC<AppKeyItemProps> = ({
       style={{ width: '14rem', cursor: 'pointer' }}
       onClick={onAppKeyClicked}
     >
-      <BaseWrapper mode="center align-text-center ">
+      <BaseWrapper mode={['center', 'align-text-center']}>
         <h3 style={{ fontSize: '1.6rem' }}>{appKey.appKey}</h3>
         <p style={{ fontSize: '1.3rem' }}>{appKey.fullname}</p>
       </BaseWrapper>

@@ -1,5 +1,4 @@
-import BaseCard from '../ui/BaseCard';
-import BaseWrapper from '../ui/BaseWrapper';
+import { BaseWrapper, BaseCard } from 'binak-react-components';
 import classes from './Instructions.module.css';
 
 import logo_appstore from '../../assets/logo_appstore.webp';
@@ -33,8 +32,8 @@ const AppInstructions: FC<AppInstructionsProps> = ({ instructions }) => {
           </li>
           <li className={classes.li}>
             bKapı -site mobil uygulamasını telefonunuza indiriniz:
-            <BaseWrapper mode="horizontal center">
-              <BaseWrapper mode="horizontal center">
+            <BaseWrapper mode={['horizontal', 'center']}>
+              <BaseWrapper mode={['horizontal', 'center']}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/tr/app/bkapi-site-mobil/id1576908443"
@@ -93,8 +92,8 @@ const AppInstructions: FC<AppInstructionsProps> = ({ instructions }) => {
           </li>
           <li className={classes.li}>
             Download bKapı -site mobil application to your mobile phone:
-            <BaseWrapper mode="horizontal center">
-              <BaseWrapper mode="horizontal center">
+            <BaseWrapper mode={['horizontal', 'center']}>
+              <BaseWrapper mode={['horizontal', 'center']}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/tr/app/bkapi-site-mobil/id1576908443"
@@ -153,8 +152,8 @@ const AppInstructions: FC<AppInstructionsProps> = ({ instructions }) => {
           </li>
           <li className={classes.li}>
             Загрузите приложение «bKapı -site mobil» на свой мобильный телефон:
-            <BaseWrapper mode="horizontal center">
-              <BaseWrapper mode="horizontal center">
+            <BaseWrapper mode={['horizontal', 'center']}>
+              <BaseWrapper mode={['horizontal', 'center']}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/tr/app/bkapi-site-mobil/id1576908443"

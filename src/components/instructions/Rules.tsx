@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import BaseCard from '../ui/BaseCard';
-import BaseWrapper from '../ui/BaseWrapper';
+import { BaseWrapper, BaseCard } from 'binak-react-components';
 
 import parse from 'html-react-parser';
 import { FC } from 'react';

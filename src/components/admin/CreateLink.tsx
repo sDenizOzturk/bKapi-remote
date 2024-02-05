@@ -1,11 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
-import BaseCard from '../ui/BaseCard';
-import BaseFormInput from '../ui/form/BaseFormInput';
-import BaseButton from '../ui/BaseButton';
-import BaseWrapper from '../ui/BaseWrapper';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../store/auth';
 import { useNavigate } from 'react-router-dom';
@@ -13,10 +8,16 @@ import { FC, useState } from 'react';
 
 import routes from '../../utils/routes';
 import urls from '../../utils/urls';
-import BaseModal from '../ui/BaseModal';
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 import { RootState } from '../../store';
+import {
+  BaseModal,
+  BaseWrapper,
+  BaseCard,
+  BaseFormInput,
+  BaseButton,
+} from 'binak-react-components';
 
 interface CreateLinkForm {
   doorNumber: string;
@@ -94,7 +95,7 @@ const CreateLink: FC = () => {
         title={dialogTitle}
         content={link}
         baseDialog
-        okayButton
+        okayButton={t('Okay')}
       />
       <BaseCard>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -107,8 +108,9 @@ const CreateLink: FC = () => {
               required: true,
               maxLength: 20,
             })}
+            errorMessage={t('Please enter a valid door number')}
           />
-          <BaseWrapper mode="align-right">
+          <BaseWrapper mode={['align-right']}>
             <BaseButton type="submit">{t('Create')}</BaseButton>
           </BaseWrapper>
         </form>

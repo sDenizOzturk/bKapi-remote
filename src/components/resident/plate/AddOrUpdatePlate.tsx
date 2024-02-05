@@ -1,15 +1,17 @@
 import { useTranslation } from 'react-i18next';
 
-import BaseWrapper from '../../ui/BaseWrapper';
-import BaseCard from '../../ui/BaseCard';
-import BaseFormInput from '../../ui/form/BaseFormInput';
-import BaseButton from '../../ui/BaseButton';
+import {
+  BaseWrapper,
+  BaseCard,
+  BaseButton,
+  BaseFormInput,
+  BaseModal,
+} from 'binak-react-components';
 
 import { useForm } from 'react-hook-form';
 
 import urls from '../../../utils/urls';
 import { ChangeEvent, FC, useState } from 'react';
-import BaseModal from '../../ui/BaseModal';
 
 import useError from '../../../hooks/useError';
 import useLoading from '../../../hooks/useLoading';
@@ -124,7 +126,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   };
 
   return (
-    <BaseWrapper mode="vertical">
+    <BaseWrapper mode={['vertical']}>
       <BaseModal
         open={askForDelete}
         title={t('Deleting Plate...')}
@@ -141,7 +143,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
         }
       >
         <h2>{t('Are you sure to delete this plate?')}</h2>
-        <BaseWrapper mode="align-right"></BaseWrapper>
+        <BaseWrapper mode={['align-right']}></BaseWrapper>
       </BaseModal>
 
       <BaseCard style={{ maxWidth: '18rem', margin: '0' }}>
@@ -154,6 +156,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
               required: true,
               minLength: 6,
             })}
+            errorMessage={t('Please enter a valid fullname')}
           />
           <BaseFormInput
             id="plateNumber"
@@ -166,6 +169,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
             onInput={(e: ChangeEvent<HTMLInputElement>) =>
               (e.target.value = ('' + e.target.value).toUpperCase())
             }
+            errorMessage={t('Please enter a valid plate number')}
           />
           <BaseFormInput
             id="info"
@@ -201,7 +205,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
             }
             register={register('telegramId')}
           />
-          <BaseWrapper mode="align-right">
+          <BaseWrapper mode={['align-right']}>
             <BaseButton type="submit">
               {update ? t('Edit') : t('Add')}
             </BaseButton>

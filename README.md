@@ -1,30 +1,41 @@
-# React + TypeScript + Vite
+# bKapi -remote
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Log in page](./images/ss_1.png)](https://antasya-remote.bkapi.site/admin/log-in)
 
-Currently, two official plugins are available:
+[![Resident page](./images/ss_2.png)](https://antasya-remote.bkapi.site/resident/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6InJlc2lkZW50IiwiZG9vck51bWJlciI6IlRFU1QiLCJpYXQiOjE3MDcxMTgzNTcsImV4cCI6MTcwNzM3NzU1N30.uHFdRdDkgENomlZ3EsFCVDRHCa66iQiqB1fQqp6SJwU)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
 
-## Expanding the ESLint configuration
+- React
+- TypeScript
+- React Hook Form
+- Redux Toolkit
+- react-i18next
+- [Bınak React Components](https://github.com/sDenizOzturk/binak-react-components)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Live URL For Test
 
-- Configure the top-level `parserOptions` property like this:
+https://antasya-remote.bkapi.site/resident/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyVHlwZSI6InJlc2lkZW50IiwiZG9vck51bWJlciI6IlRFU1QiLCJpYXQiOjE3MDY1NTczNjQsImV4cCI6MjAyMTkxNzM2NH0.8PX2uNM-jlboRhrGR_zRtKpMKIzXHe7qbkmQgDC1hZ4
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Getting started
+
+- Clone the repository
+
+```
+git clone https://github.com/sDenizOzturk/bKapi-remote.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Install dependencies
+
+```
+cd bKapi-remote
+npm install
+```
+
+- Build and run the project
+
+```
+npm run dev
+```
+
+Navigate to `http://localhost:5173`

@@ -15,11 +15,20 @@ export interface AuthState {
   token: Token;
 }
 
+console.log(localStorage.getItem('token'));
+
 const initialState: AuthState = {
-  token: JSON.parse(
-    localStorage.getItem('token') || JSON.stringify(emptyToken)
-  ),
+  token: JSON.parse(JSON.stringify(emptyToken)),
 };
+
+try {
+  initialState.token = JSON.parse(
+    localStorage.getItem('token') || JSON.stringify(emptyToken)
+  );
+} catch (err) {
+  console.log(err);
+  localStorage.removeItem('token');
+}
 
 const authSlice = createSlice({
   name: 'authentication',

@@ -1,4 +1,4 @@
-import BaseWrapper from '../components/ui/BaseWrapper';
+import { BaseWrapper } from 'binak-react-components';
 import ListPlates from '../components/resident/plate/ListPlates';
 
 import { useParams } from 'react-router';
@@ -23,7 +23,7 @@ const ResidentView: FC = () => {
   return (
     <ViewWrapper>
       <BaseWrapper
-        mode="vertical"
+        mode={['vertical']}
         style={{ padding: '1rem', minHeight: '60vh' }}
       >
         <ListPlates

@@ -3,7 +3,7 @@ import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 
 import urls from '../../utils/urls';
-import BaseWrapper from '../ui/BaseWrapper';
+import { BaseWrapper } from 'binak-react-components';
 import AppInstructions from './AppInstructions';
 import TelegramInstructions from './TelegramInstructions';
 import Rules from './Rules';
@@ -42,7 +42,7 @@ const DisplayInstructions: FC = () => {
   }
 
   return (
-    <BaseWrapper mode="vertical center" style={{ width: '30rem' }}>
+    <BaseWrapper mode={['vertical', 'center']} style={{ width: '30rem' }}>
       {instructions.mobileAppEnabled && (
         <AppInstructions instructions={instructions} />
       )}
