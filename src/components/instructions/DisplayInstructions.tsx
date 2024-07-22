@@ -28,7 +28,7 @@ const DisplayInstructions: FC = () => {
         throw new Error(responseData.message);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch, try later.');
+      setError(err.message);
     }
     setLoading(false);
   }, [setError, setLoading]);

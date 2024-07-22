@@ -11,6 +11,8 @@ const common = {
     Edit: 'Düzenle',
     Delete: 'Sil',
     Instructions: 'Talimatlar',
+    Next: 'Sonraki',
+    Previous: 'Önceki',
   },
   ru: {
     Create: 'Создавать',
@@ -21,6 +23,8 @@ const common = {
     Edit: 'Редактировать',
     Delete: 'Удалить',
     Instructions: 'инструкции',
+    Next: 'Следующий',
+    Previous: 'Предыдущий',
   },
 };
 
@@ -37,6 +41,9 @@ const error = {
     'Token Expired': 'Token süresi sona ermiş',
     'Key is not verified': "Token'ın süresi aşılmış",
     'Not authenticated': 'Eşleştirme hatası',
+    'A permanent link has already been created before for this door number!':
+      'Bu kapı numarası için daha önce oluşturuluş bir kalıcı bağlantı bulunmaktadır!',
+    'Link is not valid!': 'Link geçerli değil!',
   },
   ru: {
     'Failed to fetch': 'Не удалось получить',
@@ -50,6 +57,9 @@ const error = {
     'Token Expired': 'Срок действия токена истек',
     'Key is not verified': 'Ключ не проверен',
     'Not authenticated': 'Не аутентифицирован',
+    'A permanent link has already been created before for this door number!':
+      'Для этого номера двери уже была создана постоянная ссылка!',
+    'Link is not valid!': 'Ссылка недействительна!',
   },
 };
 
@@ -62,6 +72,8 @@ const validation = {
     'Please enter a valid fullname': 'Lütfen geçerli bir isim soyad giriniz',
     'Please enter a valid plate number':
       'Lütfen geçerli bir plaka numarası giriniz',
+    'Please enter a valid application key':
+      'Lütfen geçerli uygulama anahtarı giriniz',
   },
   ru: {
     'Please enter a valid value': 'Пожалуйста, введите допустимое значение',
@@ -72,6 +84,8 @@ const validation = {
       'Пожалуйста, введите действительное полное имя',
     'Please enter a valid plate number':
       'Пожалуйста, введите действительный номерной знак',
+    'Please enter a valid application key':
+      'Пожалуйста, введите действительный ключ приложения',
   },
 };
 
@@ -81,24 +95,50 @@ const admin = {
     'Log Out': 'Çıkış',
     Password: 'Parola',
     'Admin Log In': 'Admin Girişi',
-    'Create Link': 'Bağlantı Oluştur',
-    'Link is created': 'Bağlantı oluşturuldu',
-    'Link is copied to clipboard': 'Bağlantı panoya kopyalandı',
-    'Door Number': 'Kapı Numarası',
+    Links: 'Bağlantılar',
   },
   ru: {
     'Log In': 'Авторизоваться',
     'Log Out': 'Выйти',
     Password: 'Пароль',
     'Admin Log In': 'Вход администратора',
-    'Create Link': 'Создать ссылку',
-    'Link is created': 'Ссылка создана',
-    'Link is copied to clipboard': 'Ссылка скопирована в буфер обмена',
-    'Door Number': 'Номер двери',
   },
 };
 
-const resident = {
+const link = {
+  tr: {
+    Links: 'Bağlantılar',
+    'Create Temporary': 'Geçici Oluştur',
+    'Create Permanent': 'Kalıcı Oluştur',
+    'Create Temporary Link': 'Geçici Bağlantı Oluştur',
+    'Create Permanent Link': 'Kalıcı Bağlantı Oluştur',
+    'Link is created': 'Bağlantı oluşturuldu',
+    'Link is copied to clipboard': 'Bağlantı panoya kopyalandı',
+    'Door Number': 'Kapı Numarası',
+    'Search Temporary Links': 'Geçici Bağlantı Ara',
+    Search: 'Ara',
+    'Deleting Permanent Key...': 'Kalıcı Anahtar Siliniyor...',
+    'Are you sure to delete this permanent key?':
+      'Bu kalıcı bağlantıyı silmek istediğinizden emin misiniz?',
+  },
+  ru: {
+    Links: 'Ссылки',
+    'Create Temporary': 'Создать временный',
+    'Create Permanent': 'Создать постоянный',
+    'Create Temporary Link': 'Создать временную ссылку',
+    'Create Permanent Link': 'Создать постоянную ссылку',
+    'Link is created': 'Ссылка создана',
+    'Link is copied to clipboard': 'Ссылка скопирована в буфер обмена',
+    'Door Number': 'Номер двери',
+    'Search Temporary Links': 'Поиск временных ссылок',
+    Search: 'Поиск',
+    'Deleting Permanent Key...': 'Удаление постоянного ключа...',
+    'Are you sure to delete this permanent key?':
+      'Вы уверены, что удалите этот постоянный ключ?',
+  },
+};
+
+const registry = {
   tr: {
     "Residents' Vehicles": 'Site Sakinlerine Ait Araçlar',
     "Guests' Vehicles": 'Misafirlere Ait Araçlar',
@@ -122,6 +162,8 @@ const resident = {
       'Bu plakayı silmek istediğinizden emin misiniz?',
     'Are you sure to delete this application key?':
       'Bu uygulama anahtarını silmek istediğinizden emin misiniz?',
+    'Show instructions': 'Talimatları göster',
+    'Hide instructions': 'Talimatları gizle',
   },
   ru: {
     "Residents' Vehicles": 'Транспортные средства жителей',
@@ -146,6 +188,8 @@ const resident = {
       'Вы уверены, что удалите этот номерной знак?',
     'Are you sure to delete this application key?':
       'Вы уверены, что удалите этот ключ приложения?',
+    'Show instructions': 'Показать инструкции',
+    'Hide instructions': 'Скрыть инструкции',
   },
 };
 
@@ -157,16 +201,18 @@ const resources = {
       ...error.tr,
       ...validation.tr,
       ...admin.tr,
-      ...resident.tr,
+      ...link.tr,
+      ...registry.tr,
     },
   },
   ru: {
     translation: {
       ...common.ru,
       ...error.ru,
-      ...validation.tr,
+      ...validation.ru,
       ...admin.ru,
-      ...resident.ru,
+      ...link.ru,
+      ...registry.ru,
     },
   },
 };

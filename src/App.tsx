@@ -3,8 +3,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import RootView from './views/Root';
 import LoginView from './views/LogIn';
-import CreateLinkView from './views/CreateLink';
-import ResidentView from './views/Resident';
+import CreateLinkView from './views/Links';
+import RegisterView from './views/Register';
 import ErrorView from './views/NotFound';
 import InstructionsView from './views/Instructions';
 
@@ -26,8 +26,12 @@ const router = createBrowserRouter([
         element: <CreateLinkView />,
       },
       {
-        path: routes.resident.list,
-        element: <ResidentView />,
+        path: routes.link.temporary,
+        element: <RegisterView mode="temporary" />,
+      },
+      {
+        path: routes.link.permanent,
+        element: <RegisterView mode="permanent" />,
       },
       {
         path: routes.instructions.root,

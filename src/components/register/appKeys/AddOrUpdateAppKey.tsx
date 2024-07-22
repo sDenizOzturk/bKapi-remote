@@ -21,6 +21,7 @@ interface AddOrUpdateAppKeyProps {
   targetAppKey?: AppKey;
   refetch: () => any;
   token: string;
+  mode: 'permanent' | 'temporary';
 }
 
 const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
@@ -28,6 +29,7 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
   targetAppKey,
   refetch,
   token,
+  mode,
 }) => {
   const { t } = useTranslation();
 
@@ -55,6 +57,7 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
         Authorization: 'Bearer ' + token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        UserType: mode,
       };
       const body = JSON.stringify(data);
 
@@ -88,7 +91,7 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
     try {
       const response = await fetch(urls.deleteAppKey + targetAppKey!.fullname, {
         method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + token },
+        headers: { Authorization: 'Bearer ' + token, UserType: mode },
       });
       const responseData = await response.json();
 

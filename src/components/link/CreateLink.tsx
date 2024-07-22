@@ -11,34 +11,38 @@ import urls from '../../utils/urls';
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 import { RootState } from '../../store';
-import {
-  BaseModal,
-  BaseWrapper,
-  BaseCard,
-  BaseFormInput,
-  BaseButton,
-} from 'binak-react-components';
+import { BaseWrapper, BaseFormInput, BaseButton } from 'binak-react-components';
+
+interface CreateLinkProps {
+  refetch: () => void;
+  setCurrentPage: (arg0: number) => void;
+  setDisplayingLink: (link: string, doorNumber: string) => void;
+}
 
 interface CreateLinkForm {
   doorNumber: string;
 }
 
-const CreateLink: FC = () => {
+const CreateLink: FC<CreateLinkProps> = ({
+  refetch,
+  setCurrentPage,
+  setDisplayingLink,
+}) => {
   const { t } = useTranslation();
   const token = useSelector((state: RootState) => state.auth.token);
 
   const { setError } = useError();
   const { setLoading } = useLoading();
 
-  const [link, setLink] = useState('');
-  const [dialogTitle, setDialogTitle] = useState('');
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [mode, setMode] = useState<'permanent' | 'temporary'>('permanent');
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateLinkForm>({ mode: 'onTouched' });
 
@@ -54,23 +58,20 @@ const CreateLink: FC = () => {
         },
         body: JSON.stringify({
           doorNumber: data.doorNumber,
+          type: mode,
         }),
       });
       const responseData = await response.json();
 
+      setDisplayingLink(responseData.link, responseData.doorNumber);
       if (response.status === 200) {
-        setLink(responseData.link);
-        try {
-          await navigator.clipboard.writeText(responseData.link);
-          setDialogTitle(
-            t('Link is copied to clipboard') + ' - ' + data.doorNumber
-          );
-        } catch (err) {
-          console.log('Link can not be copied to clipboard', err);
-          setDialogTitle(t('Link is created') + ' - ' + data.doorNumber);
+        if (mode === 'permanent') {
+          setCurrentPage(responseData.currentPage);
+          refetch();
         }
+        reset();
       } else {
-        if (response.status === 401 || response.status === 500) {
+        if (response.status === 401) {
           dispatch(authActions.logout());
           navigate(routes.admin.logIn);
         }
@@ -79,42 +80,39 @@ const CreateLink: FC = () => {
     } catch (err: any) {
       setError(err.message || 'Failed to authenticate, try later.');
     }
-
     setLoading(false);
   };
 
   return (
     <>
-      <BaseModal
-        open={!!link}
-        onClose={() => {
-          setLink('');
-          setDialogTitle('');
-        }}
-        center
-        title={dialogTitle}
-        content={link}
-        baseDialog
-        okayButton={t('Okay')}
-      />
-      <BaseCard>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>{t('Create Link')}</h2>
-          <BaseFormInput
-            id="doorNumber"
-            label={t('Door Number')}
-            error={errors.doorNumber}
-            register={register('doorNumber', {
-              required: true,
-              maxLength: 20,
-            })}
-            errorMessage={t('Please enter a valid door number')}
-          />
-          <BaseWrapper mode={['align-right']}>
-            <BaseButton type="submit">{t('Create')}</BaseButton>
-          </BaseWrapper>
-        </form>
-      </BaseCard>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2>
+          {mode === 'temporary' && t('Create Temporary Link')}
+          {mode === 'permanent' && t('Create Permanent Link')}
+        </h2>
+        <BaseFormInput
+          id="doorNumber"
+          label={t('Door Number')}
+          error={errors.doorNumber}
+          register={register('doorNumber', {
+            required: true,
+            maxLength: 20,
+          })}
+          errorMessage={t('Please enter a valid door number')}
+        />
+        <BaseWrapper mode={['align-right']}>
+          <BaseButton type="submit">{t('Create')}</BaseButton>
+          <BaseButton
+            mode="flat"
+            type="button"
+            onClick={() =>
+              setMode(mode === 'permanent' ? 'temporary' : 'permanent')
+            }
+          >
+            {t(mode === 'permanent' ? 'Create Temporary' : 'Create Permanent')}
+          </BaseButton>
+        </BaseWrapper>
+      </form>
     </>
   );
 };

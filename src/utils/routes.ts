@@ -1,16 +1,21 @@
 const adminRoot = '/admin';
-const residentRoot = '/resident';
+const registerRoot = '/register';
 const instructionsRoot = '/instructions';
 
 const admin = {
   root: adminRoot,
   logIn: adminRoot + '/log-in',
-  createLink: adminRoot + '/create-link',
+  createLink: adminRoot + '/links',
 };
 const resident = {
-  root: residentRoot,
-  list: residentRoot + '/:token',
+  root: registerRoot,
 };
+
+const link = {
+  permanent: 'permanent/:token',
+  temporary: 'temporary/:token',
+};
+
 const instructions = {
   root: instructionsRoot,
 };
@@ -20,4 +25,5 @@ export default {
   admin,
   resident,
   instructions,
+  link,
 };

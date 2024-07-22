@@ -22,7 +22,7 @@ const Header: FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const tokenValid = isTokenValid(token);
 
-  const adminRoutes = [{ to: routes.admin.createLink, text: t('Create Link') }];
+  const adminRoutes = [{ to: routes.admin.createLink, text: t('Links') }];
   const defaultRoutes = [
     { to: routes.instructions.root, text: t('Instructions') },
   ];

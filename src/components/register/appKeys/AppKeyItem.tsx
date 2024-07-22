@@ -16,7 +16,7 @@ const AppKeyItem: FC<AppKeyItemProps> = ({
   return (
     <BaseCard
       {...props}
-      style={{ width: '14rem', cursor: 'pointer' }}
+      style={{ width: '14rem', cursor: 'pointer', margin: '0' }}
       onClick={onAppKeyClicked}
     >
       <BaseWrapper mode={['center', 'align-text-center']}>

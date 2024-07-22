@@ -11,10 +11,11 @@ import { bounce } from '../../../utils/animationVariants';
 
 interface ListAppKeysProps {
   token: string;
+  mode: 'permanent' | 'temporary';
   setLoading: (arg0: boolean) => any;
 }
 
-const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
+const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
   const { t } = useTranslation();
 
   const { setError } = useError();
@@ -33,6 +34,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
       const response = await fetch(urls.listAppKeys, {
         headers: {
           Authorization: 'Bearer ' + token,
+          UserType: mode,
         },
       });
       const responseData = await response.json();
@@ -43,7 +45,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
         throw new Error(responseData.message);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch, try later.');
+      setError(err.message);
     }
     setLoading(false);
   }, [setError, setLoading, token]);
@@ -61,6 +63,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
             fetchData();
           }}
           token={token}
+          mode={mode}
         />
       </BaseModal>
 
@@ -76,6 +79,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
             fetchData();
           }}
           token={token}
+          mode={mode}
         />
       </BaseModal>
 
@@ -88,7 +92,15 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, setLoading }) => {
         </BaseWrapper>
       </BaseWrapper>
 
-      <BaseWrapper mode={['grid-2', 'center', 'gap-2rem']}>
+      <BaseWrapper
+        mode={['center']}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          maxWidth: '40rem',
+        }}
+      >
         {appKeys.map((appKey: AppKey) => (
           <AppKeyItem
             whileHover={bounce.s.scale}

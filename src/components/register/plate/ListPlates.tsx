@@ -8,14 +8,22 @@ import PlateItem from './PlateItem';
 import useError from '../../../hooks/useError';
 import { Plate } from '../../../models/plate';
 import { bounce } from '../../../utils/animationVariants';
+import routes from '../../../utils/routes';
+import { useNavigate } from 'react-router-dom';
 
 interface ListPlatesProps {
   token: string;
   plateType: 'own' | 'guest';
+  mode: 'permanent' | 'temporary';
   setLoading: (arg0: boolean) => any;
 }
 
-const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
+const ListPlates: FC<ListPlatesProps> = ({
+  token,
+  plateType,
+  mode,
+  setLoading,
+}) => {
   const { t } = useTranslation();
 
   const { setError } = useError();
@@ -24,6 +32,8 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
   const [updatingPlate, setUpdatingPlate] = useState<Plate>();
 
   const [plates, setPlates] = useState<Plate[]>([]);
+
+  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -35,6 +45,7 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
       const response = await fetch(url, {
         headers: {
           Authorization: 'Bearer ' + token,
+          UserType: mode,
         },
       });
       const responseData = await response.json();
@@ -45,7 +56,8 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
         throw new Error(responseData.message);
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch, try later.');
+      setError(err.message);
+      navigate(routes.instructions.root);
     }
     setLoading(false);
   }, [plateType, setError, setLoading, token]);
@@ -64,6 +76,7 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
             fetchData();
           }}
           token={token}
+          mode={mode}
         />
       </BaseModal>
 
@@ -80,6 +93,7 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
             fetchData();
           }}
           token={token}
+          mode={mode}
         />
       </BaseModal>
 
@@ -96,7 +110,15 @@ const ListPlates: FC<ListPlatesProps> = ({ token, plateType, setLoading }) => {
         </BaseWrapper>
       </BaseWrapper>
 
-      <BaseWrapper mode={['grid-2', 'center', 'gap-2rem']}>
+      <BaseWrapper
+        mode={['center']}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          maxWidth: '40rem',
+        }}
+      >
         {plates.map((plate: Plate) => (
           <PlateItem
             whileHover={bounce.s.scale}

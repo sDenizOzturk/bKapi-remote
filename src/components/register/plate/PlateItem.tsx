@@ -12,7 +12,7 @@ const PlateItem: FC<PlateItemProps> = ({ plate, onPlateClicked, ...props }) => {
   return (
     <BaseCard
       {...props}
-      style={{ width: '14rem', cursor: 'pointer' }}
+      style={{ width: '14rem', cursor: 'pointer', margin: '0' }}
       onClick={onPlateClicked}
     >
       <BaseWrapper mode={['center', 'align-text-center']}>

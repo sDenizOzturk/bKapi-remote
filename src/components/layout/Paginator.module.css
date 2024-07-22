@@ -1,0 +1,40 @@
+ul.react-paginate {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  list-style-type: circle;
+
+  list-style-type: none;
+
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+ul.react-paginate li a {
+  border-radius: 0.5rem;
+  padding: 0.1rem 1rem;
+  border: var(--color2) 1px solid;
+  cursor: pointer;
+  margin: 0.1rem;
+}
+ul.react-paginate li.previous a,
+ul.react-paginate li.next a,
+ul.react-paginate li.break a {
+  border-color: transparent;
+}
+ul.react-paginate li.active a {
+  background-color: var(--color2);
+  border-color: transparent;
+  color: var(--color3);
+  min-width: 32px;
+}
+ul.react-paginate li.disabled a {
+  color: grey;
+}
+ul.react-paginate li.disable,
+ul.react-paginate li.disabled a {
+  cursor: default;
+}

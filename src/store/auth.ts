@@ -15,8 +15,6 @@ export interface AuthState {
   token: Token;
 }
 
-console.log(localStorage.getItem('token'));
-
 const initialState: AuthState = {
   token: JSON.parse(JSON.stringify(emptyToken)),
 };

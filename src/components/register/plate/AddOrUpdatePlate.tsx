@@ -23,6 +23,7 @@ interface AddOrUpdatePlateProps {
   targetPlate?: Plate;
   refetch: () => any;
   token: string;
+  mode: 'permanent' | 'temporary';
 }
 
 const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
@@ -31,6 +32,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   targetPlate,
   refetch,
   token,
+  mode,
 }) => {
   const { t } = useTranslation();
 
@@ -72,6 +74,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
         Authorization: 'Bearer ' + token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        UserType: mode,
       };
 
       const body = JSON.stringify(data);
@@ -106,7 +109,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
           targetPlate?.plateNumber,
         {
           method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + token },
+          headers: { Authorization: 'Bearer ' + token, UserType: mode },
         }
       );
       const responseData = await response.json();
@@ -165,6 +168,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
             register={register('plateNumber', {
               required: true,
               minLength: 5,
+              validate: (value) => !value.includes(' '),
             })}
             onInput={(e: ChangeEvent<HTMLInputElement>) =>
               (e.target.value = ('' + e.target.value).toUpperCase())
