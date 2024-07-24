@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import ReactPaginate from 'react-paginate';
 import classes from './paginator.module.css';
-import { useTranslation } from 'react-i18next';
 import { BaseWrapper } from 'binak-react-components';
 
 interface PaginatorProps {
@@ -17,15 +16,16 @@ const Paginator: FC<PaginatorProps> = ({
   currentPage,
   totalPages,
 }) => {
-  const { t } = useTranslation();
   return (
     <BaseWrapper mode={['center']}>
       <ReactPaginate
         breakLabel="..."
-        nextLabel={t('Next')}
+        nextLabel={'>'}
+        previousLabel={'<'}
+        nextClassName={classes['next']}
+        previousClassName={classes['next']}
         pageRangeDisplayed={3}
         pageCount={totalPages}
-        previousLabel={t('Previous')}
         className={classes['react-paginate']}
         renderOnZeroPageCount={null}
         forcePage={currentPage}

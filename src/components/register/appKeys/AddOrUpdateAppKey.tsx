@@ -167,13 +167,15 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
             <BaseButton type="submit">
               {update ? t('Edit') : t('Add')}
             </BaseButton>
-            <BaseButton
-              type="button"
-              mode="outline"
-              onClick={() => setAskForDelete(true)}
-            >
-              {t('Delete')}
-            </BaseButton>
+            {update && (
+              <BaseButton
+                type="button"
+                mode="outline"
+                onClick={() => setAskForDelete(true)}
+              >
+                {t('Delete')}
+              </BaseButton>
+            )}
           </BaseWrapper>
         </form>
       </BaseCard>

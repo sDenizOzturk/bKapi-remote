@@ -1,6 +1,7 @@
-import { BaseModal } from 'binak-react-components';
+import { BaseButton, BaseModal } from 'binak-react-components';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface LinkDialogProps {
   onClose: () => void;
@@ -11,6 +12,12 @@ interface LinkDialogProps {
 const LinkDialog: FC<LinkDialogProps> = ({ onClose, link, dialogTitle }) => {
   const { t } = useTranslation();
 
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    const navigateLink = '/' + link.split('/').slice(3).join('/');
+    navigate(navigateLink);
+  };
+
   return (
     <BaseModal
       open={!!link}
@@ -19,7 +26,14 @@ const LinkDialog: FC<LinkDialogProps> = ({ onClose, link, dialogTitle }) => {
       title={dialogTitle}
       content={link}
       baseDialog
-      okayButton={t('Okay')}
+      menuItems={
+        <>
+          <BaseButton mode="outline" onClick={handleNavigate}>
+            {t('Open Link')}
+          </BaseButton>
+          <BaseButton onClick={onClose}>{t('Okay')}</BaseButton>
+        </>
+      }
     />
   );
 };

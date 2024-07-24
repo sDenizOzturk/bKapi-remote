@@ -27,7 +27,7 @@ const FilterLinks: FC<FilterLinkProps> = ({ setFilter }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>{t('Search Temporary Links')}</h2>
+        <h2>{t('Search Permanent Links')}</h2>
         <BaseFormInput
           id="filter"
           label={t('Door Number')}

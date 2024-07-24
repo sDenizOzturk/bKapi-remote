@@ -69,7 +69,6 @@ const CreateLink: FC<CreateLinkProps> = ({
           setCurrentPage(responseData.currentPage);
           refetch();
         }
-        reset();
       } else {
         if (response.status === 401) {
           dispatch(authActions.logout());
@@ -80,6 +79,7 @@ const CreateLink: FC<CreateLinkProps> = ({
     } catch (err: any) {
       setError(err.message || 'Failed to authenticate, try later.');
     }
+    reset();
     setLoading(false);
   };
 

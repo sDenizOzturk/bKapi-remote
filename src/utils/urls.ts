@@ -1,4 +1,5 @@
-const root = 'http://localhost:4000';
+//const root = 'http://localhost:4000';
+const root = 'http://192.168.1.189:4000';
 //const root = 'https://antasya-sunucu.bkapi.site:8081';
 
 const adminRoot = root + '/admin';

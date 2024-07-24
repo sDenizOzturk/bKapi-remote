@@ -13,6 +13,7 @@ const common = {
     Instructions: 'Talimatlar',
     Next: 'Sonraki',
     Previous: 'Önceki',
+    'Open Link': 'Bağlantıyı Aç',
   },
   ru: {
     Create: 'Создавать',
@@ -25,6 +26,7 @@ const common = {
     Instructions: 'инструкции',
     Next: 'Следующий',
     Previous: 'Предыдущий',
+    'Open Link': 'Открыть ссылку',
   },
 };
 
@@ -115,7 +117,7 @@ const link = {
     'Link is created': 'Bağlantı oluşturuldu',
     'Link is copied to clipboard': 'Bağlantı panoya kopyalandı',
     'Door Number': 'Kapı Numarası',
-    'Search Temporary Links': 'Geçici Bağlantı Ara',
+    'Search Permanent Links': 'Kalıcı Bağlantı Ara',
     Search: 'Ara',
     'Deleting Permanent Key...': 'Kalıcı Anahtar Siliniyor...',
     'Are you sure to delete this permanent key?':
@@ -130,7 +132,7 @@ const link = {
     'Link is created': 'Ссылка создана',
     'Link is copied to clipboard': 'Ссылка скопирована в буфер обмена',
     'Door Number': 'Номер двери',
-    'Search Temporary Links': 'Поиск временных ссылок',
+    'Search Permanent Links': 'Поиск постоянных ссылок',
     Search: 'Поиск',
     'Deleting Permanent Key...': 'Удаление постоянного ключа...',
     'Are you sure to delete this permanent key?':

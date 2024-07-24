@@ -24,6 +24,13 @@ ul.react-paginate li.previous a,
 ul.react-paginate li.next a,
 ul.react-paginate li.break a {
   border-color: transparent;
+  font-size: 1rem;
+
+  border-radius: 0.5rem;
+  padding: 0.1rem 1rem;
+  border: var(--color2) 1px solid;
+  cursor: pointer;
+  margin: 0.1rem;
 }
 ul.react-paginate li.active a {
   background-color: var(--color2);

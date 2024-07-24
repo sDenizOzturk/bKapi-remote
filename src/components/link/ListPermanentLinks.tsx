@@ -143,12 +143,14 @@ const ListLinks: FC = () => {
         </BaseCard>
       )}
 
-      <Paginator
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        refetch={refetchData}
-      />
+      {totalPages > 1 && (
+        <Paginator
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          refetch={refetchData}
+        />
+      )}
 
       <LinkDialog
         onClose={closeLinkDialog}
