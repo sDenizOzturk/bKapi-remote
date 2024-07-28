@@ -1,15 +1,15 @@
 import { FC } from 'react';
+import ListHouseholds from '../components/household/ListHouseholds';
 import { BaseWrapper } from 'binak-react-components';
 import ViewWrapper from '../components/layout/ViewWrapper';
-import ListPermantLinks from '../components/link/ListPermanentLinks';
 
-const CreateLinkView: FC = () => {
+const LogInView: FC = () => {
   return (
     <ViewWrapper>
       <BaseWrapper style={{ minHeight: '60vh' }} mode={['vertical']}>
-        <ListPermantLinks />
+        <ListHouseholds />
       </BaseWrapper>
     </ViewWrapper>
   );
 };
-export default CreateLinkView;
+export default LogInView;

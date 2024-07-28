@@ -1,5 +1,10 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import { BaseWrapper, BaseButton, BaseModal } from 'binak-react-components';
+import {
+  BaseWrapper,
+  BaseButton,
+  BaseModal,
+  BaseCard,
+} from 'binak-react-components';
 import AddOrUpdatePlate from './AddOrUpdatePlate';
 import { useTranslation } from 'react-i18next';
 
@@ -9,24 +14,34 @@ import useError from '../../../hooks/useError';
 import { Plate } from '../../../models/plate';
 import { bounce } from '../../../utils/animationVariants';
 import routes from '../../../utils/routes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { UserType } from '../../../models/userType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 interface ListPlatesProps {
-  token: string;
   plateType: 'own' | 'guest';
-  mode: 'permanent' | 'temporary';
+  userType: UserType;
   setLoading: (arg0: boolean) => any;
 }
 
 const ListPlates: FC<ListPlatesProps> = ({
-  token,
   plateType,
-  mode,
+  userType,
   setLoading,
 }) => {
   const { t } = useTranslation();
 
-  const { setError } = useError();
+  let token = '';
+  let doorNumber = '';
+  if (userType === 'admin') {
+    token = useSelector((state: RootState) => state.auth.token).token;
+    doorNumber = useParams().doorNumber as string;
+  } else {
+    token = useParams().token as string;
+  }
+
+  const { setError, setErrors } = useError();
 
   const [showAddPlate, setShowAddPlate] = useState(false);
   const [updatingPlate, setUpdatingPlate] = useState<Plate>();
@@ -40,12 +55,20 @@ const ListPlates: FC<ListPlatesProps> = ({
 
     try {
       const url =
-        plateType === 'own' ? urls.listOwnPlates : urls.listGuestPlates;
+        (plateType === 'own' ? urls.listOwnPlates : urls.listGuestPlates) +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
+
+      console.log(url);
 
       const response = await fetch(url, {
         headers: {
           Authorization: 'Bearer ' + token,
-          UserType: mode,
+          UserType: userType,
         },
       });
       const responseData = await response.json();
@@ -66,6 +89,42 @@ const ListPlates: FC<ListPlatesProps> = ({
     fetchData();
   }, [fetchData]);
 
+  const [askedForDelete, setAskedForDelete] = useState<Plate | undefined>(
+    undefined
+  );
+
+  const deletePlate = async () => {
+    setLoading(true);
+    try {
+      const url =
+        (plateType === 'own' ? urls.deleteOwnPlate : urls.deleteGuestPlate) +
+        askedForDelete?.plateNumber +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + token, UserType: userType },
+      });
+      const responseData = await response.json();
+
+      if (response.status === 200) {
+        fetchData();
+      } else {
+        setErrors(responseData.data);
+        throw new Error(responseData.message);
+      }
+    } catch (err: any) {
+      console.log(err);
+      setError(err.message || 'Failed, try later.');
+    }
+    setAskedForDelete(undefined);
+    setLoading(false);
+  };
+
   return (
     <>
       <BaseModal open={showAddPlate} onClose={() => setShowAddPlate(false)}>
@@ -75,8 +134,7 @@ const ListPlates: FC<ListPlatesProps> = ({
             setShowAddPlate(false);
             fetchData();
           }}
-          token={token}
-          mode={mode}
+          userType={userType}
         />
       </BaseModal>
 
@@ -92,8 +150,11 @@ const ListPlates: FC<ListPlatesProps> = ({
             setUpdatingPlate(undefined);
             fetchData();
           }}
-          token={token}
-          mode={mode}
+          userType={userType}
+          setAskedForDelete={() => {
+            setAskedForDelete(updatingPlate);
+            setUpdatingPlate(undefined);
+          }}
         />
       </BaseModal>
 
@@ -126,9 +187,38 @@ const ListPlates: FC<ListPlatesProps> = ({
             key={plate.plateNumber}
             plate={plate}
             onPlateClicked={() => setUpdatingPlate(plate)}
+            onDeleteKeyClicked={() => setAskedForDelete(plate)}
           />
         ))}
+
+        {plates.length === 0 && (
+          <BaseCard style={{ margin: '-0.5rem' }}>
+            {t('No vehicles added')}
+          </BaseCard>
+        )}
       </BaseWrapper>
+
+      <BaseModal
+        open={!!askedForDelete}
+        title={t('Deleting Plate...')}
+        center
+        baseDialog
+        onClose={() => setAskedForDelete(undefined)}
+        menuItems={
+          <>
+            <BaseButton
+              mode="outline"
+              onClick={() => setAskedForDelete(undefined)}
+            >
+              {t('No')}
+            </BaseButton>
+            <BaseButton onClick={deletePlate}>{t('Yes')}</BaseButton>
+          </>
+        }
+      >
+        <h2>{t('Are you sure to delete this plate?')}</h2>
+        <BaseWrapper mode={['align-right']}></BaseWrapper>
+      </BaseModal>
     </>
   );
 };

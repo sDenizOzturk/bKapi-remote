@@ -5,33 +5,45 @@ import {
   BaseCard,
   BaseButton,
   BaseFormInput,
-  BaseModal,
 } from 'binak-react-components';
 import { useForm } from 'react-hook-form';
 
 import urls from '../../../utils/urls';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
 
 import useError from '../../../hooks/useError';
 import useLoading from '../../../hooks/useLoading';
 import { AppKey } from '../../../models/appKey';
+import { UserType } from '../../../models/userType';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { RootState } from '../../../store';
 
 interface AddOrUpdateAppKeyProps {
   update?: boolean;
   targetAppKey?: AppKey;
-  refetch: () => any;
-  token: string;
-  mode: 'permanent' | 'temporary';
+  refetch: () => void;
+  userType: UserType;
+  setAskedForDelete?: () => void;
 }
 
 const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
   update,
   targetAppKey,
   refetch,
-  token,
-  mode,
+  userType,
+  setAskedForDelete,
 }) => {
   const { t } = useTranslation();
+
+  let token = '';
+  let doorNumber = '';
+  if (userType === 'admin') {
+    token = useSelector((state: RootState) => state.auth.token).token;
+    doorNumber = useParams().doorNumber as string;
+  } else {
+    token = useParams().token as string;
+  }
 
   const { setError, setErrors } = useError();
   const { setLoading } = useLoading();
@@ -57,41 +69,24 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
         Authorization: 'Bearer ' + token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        UserType: mode,
+        UserType: userType,
       };
       const body = JSON.stringify(data);
 
-      const response = await fetch(
-        update ? urls.updateAppKey + targetAppKey!.fullname : urls.postAppKey,
-        {
-          method: update ? 'PUT' : 'POST',
-          headers,
-          body,
-        }
-      );
-      const responseData = await response.json();
-
-      if (response.status === 200) {
-        refetch();
-      } else {
-        setErrors(responseData.data);
-        throw new Error(responseData.message);
-      }
-    } catch (err: any) {
-      console.log(err);
-      setError(err.message || 'Failed, try later.');
-    }
-    setLoading(false);
-  };
-
-  const [askForDelete, setAskForDelete] = useState(false);
-
-  const deleteAppKey = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(urls.deleteAppKey + targetAppKey!.fullname, {
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + token, UserType: mode },
+      const url =
+        (update
+          ? urls.updateAppKey + targetAppKey!.fullname
+          : urls.postAppKey) +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
+      const response = await fetch(url, {
+        method: update ? 'PUT' : 'POST',
+        headers,
+        body,
       });
       const responseData = await response.json();
 
@@ -105,31 +100,11 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
       console.log(err);
       setError(err.message || 'Failed, try later.');
     }
-    setAskForDelete(false);
     setLoading(false);
   };
 
   return (
     <BaseWrapper mode={['vertical']}>
-      <BaseModal
-        open={askForDelete}
-        title={t('Deleting Application Key...')}
-        center
-        baseDialog
-        onClose={() => setAskForDelete(false)}
-        menuItems={
-          <>
-            <BaseButton mode="outline" onClick={() => setAskForDelete(false)}>
-              {t('No')}
-            </BaseButton>
-            <BaseButton onClick={deleteAppKey}>{t('Yes')}</BaseButton>
-          </>
-        }
-      >
-        <h2>{t('Are you sure to delete this application key?')}</h2>
-        <BaseWrapper mode={['align-right']}></BaseWrapper>
-      </BaseModal>
-
       <BaseCard style={{ maxWidth: '18rem', margin: '0' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <BaseFormInput
@@ -167,11 +142,11 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
             <BaseButton type="submit">
               {update ? t('Edit') : t('Add')}
             </BaseButton>
-            {update && (
+            {update && setAskedForDelete && (
               <BaseButton
                 type="button"
                 mode="outline"
-                onClick={() => setAskForDelete(true)}
+                onClick={setAskedForDelete}
               >
                 {t('Delete')}
               </BaseButton>

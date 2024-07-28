@@ -1,7 +1,6 @@
 import { BaseCard, BaseWrapper } from 'binak-react-components';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { PermanentLink } from '../../models/permanentLink';
-import PermanentLinkItem from './PermanentLinkItem';
+import { Household } from '../../models/household';
 import { bounce } from '../../utils/animationVariants';
 import useLoading from '../../hooks/useLoading';
 import useError from '../../hooks/useError';
@@ -9,25 +8,21 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import urls from '../../utils/urls';
 import Paginator from '../ui/Paginator';
-import CreateLink from './CreateLink';
-import FilterLinks from './FilterLinks';
 import { useTranslation } from 'react-i18next';
-import { useCopyToClipboard } from 'usehooks-ts';
-import LinkDialog from './LinkDialog';
+import HouseholdItem from './HouseholdItem';
+import CreateHousehold from './CreateHousehold';
+import FilterHouseholds from './FilterHousehold';
 import TabButtons from '../ui/TabButtons';
 
-const ListPermantLinks: FC = () => {
-  const [permanentLinks, setPermanentLinks] = useState<PermanentLink[]>([]);
+const ListHouseholds: FC = () => {
+  const [households, setHouseholds] = useState<Household[]>([]);
 
   const { t } = useTranslation();
 
-  const [mode, setMode] = useState<
-    'createPermanent' | 'createTemporary' | 'search'
-  >('createPermanent');
+  const [mode, setMode] = useState<'create' | 'search'>('create');
 
   const modes = [
-    { name: 'createPermanent', buttonText: t('Create Permanent') },
-    { name: 'createTemporary', buttonText: t('Create Temporary') },
+    { name: 'create', buttonText: t('Create or Open') },
     { name: 'search', buttonText: t('Search') },
   ];
 
@@ -48,7 +43,7 @@ const ListPermantLinks: FC = () => {
 
     try {
       const url =
-        urls.listLinks +
+        urls.listHouseholds +
         '?' +
         new URLSearchParams({
           filter,
@@ -62,7 +57,7 @@ const ListPermantLinks: FC = () => {
       const responseData = await response.json();
 
       if (response.status === 200) {
-        setPermanentLinks(responseData.permanentLinks);
+        setHouseholds(responseData.households);
         setCurrentPage(responseData.currentPage);
         setTotalPages(responseData.totalPages);
       } else {
@@ -83,40 +78,14 @@ const ListPermantLinks: FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const [link, setLink] = useState('');
-  const [dialogTitle, setDialogTitle] = useState('');
-
-  const [_copiedText, copyToClipboard] = useCopyToClipboard();
-  const displayLink = async (link: string, doorNumber: string) => {
-    setLink(link);
-    try {
-      await copyToClipboard(link);
-      setDialogTitle(t('Link is copied to clipboard') + ' - ' + doorNumber);
-    } catch (err) {
-      console.log('Link can not be copied to clipboard', err);
-      setDialogTitle(t('Link is created') + ' - ' + doorNumber);
-    }
-  };
-
-  const closeLinkDialog = () => {
-    setLink('');
-    setDialogTitle('');
-  };
-
   return (
     <>
       <BaseCard>
         <TabButtons modes={modes} setMode={setMode} currentMode={mode} />
         <BaseWrapper style={{ minWidth: '20rem' }}>
-          <CreateLink
-            refetch={refetchData}
-            setCurrentPage={setCurrentPage}
-            setDisplayingLink={displayLink}
-            mode={mode}
-          />
-
+          {mode === 'create' && <CreateHousehold />}
           {mode === 'search' && (
-            <FilterLinks
+            <FilterHouseholds
               setFilter={(val) => {
                 setFilter(val);
                 setCurrentPage(0);
@@ -125,6 +94,7 @@ const ListPermantLinks: FC = () => {
           )}
         </BaseWrapper>
       </BaseCard>
+
       <BaseWrapper
         mode={['center']}
         style={{
@@ -134,23 +104,21 @@ const ListPermantLinks: FC = () => {
           maxWidth: '60rem',
         }}
       >
-        {permanentLinks.map((permanentLink: PermanentLink) => (
-          <PermanentLinkItem
+        {households.map((household: Household) => (
+          <HouseholdItem
             whileHover={bounce.s.scale}
             transition={bounce.m.transition}
-            key={permanentLink.doorNumber}
-            permanentLink={permanentLink}
+            key={household.doorNumber}
+            household={household}
             refetch={refetchData}
-            setDisplayingLink={displayLink}
           />
         ))}
       </BaseWrapper>
-      {permanentLinks.length === 0 && (
+      {households.length === 0 && (
         <BaseCard style={{ marginTop: '-1rem' }}>
-          {filter ? t('No links found.') : t('No links created.')}
+          {filter ? t('No links found') : t('No links created')}
         </BaseCard>
       )}
-
       {totalPages > 1 && (
         <Paginator
           setCurrentPage={setCurrentPage}
@@ -159,14 +127,8 @@ const ListPermantLinks: FC = () => {
           refetch={refetchData}
         />
       )}
-
-      <LinkDialog
-        onClose={closeLinkDialog}
-        link={link}
-        dialogTitle={dialogTitle}
-      />
     </>
   );
 };
 
-export default ListPermantLinks;
+export default ListHouseholds;

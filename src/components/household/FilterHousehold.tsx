@@ -3,31 +3,31 @@ import { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface FilterLinkProps {
+interface FilterHouseholdProps {
   setFilter: (arg0: string) => void;
 }
 
-interface FilterLinkForm {
+interface FilterHouseholdForm {
   filter: string;
 }
 
-const FilterLinks: FC<FilterLinkProps> = ({ setFilter }) => {
+const FilterHouseholds: FC<FilterHouseholdProps> = ({ setFilter }) => {
   const { t } = useTranslation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FilterLinkForm>({ mode: 'onTouched' });
+  } = useForm<FilterHouseholdForm>({ mode: 'onTouched' });
 
-  const onSubmit = async (data: FilterLinkForm) => {
+  const onSubmit = async (data: FilterHouseholdForm) => {
     setFilter(data.filter);
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>{t('Search Permanent Links')}</h2>
+        <h2>{t('Search Household')}</h2>
         <BaseFormInput
           id="filter"
           label={t('Door Number')}
@@ -45,4 +45,4 @@ const FilterLinks: FC<FilterLinkProps> = ({ setFilter }) => {
   );
 };
 
-export default FilterLinks;
+export default FilterHouseholds;

@@ -5,6 +5,7 @@ import RootView from './views/Root';
 import LoginView from './views/LogIn';
 import CreateLinkView from './views/Links';
 import RegisterView from './views/Register';
+import ListHouseholdsView from './views/Households';
 import ErrorView from './views/NotFound';
 import InstructionsView from './views/Instructions';
 
@@ -22,16 +23,24 @@ const router = createBrowserRouter([
         element: <LoginView />,
       },
       {
-        path: routes.admin.createLink,
+        path: routes.link.listLinks,
         element: <CreateLinkView />,
       },
       {
         path: routes.link.temporary,
-        element: <RegisterView mode="temporary" />,
+        element: <RegisterView userType="temporary" />,
       },
       {
         path: routes.link.permanent,
-        element: <RegisterView mode="permanent" />,
+        element: <RegisterView userType="permanent" />,
+      },
+      {
+        path: routes.household.list,
+        element: <ListHouseholdsView />,
+      },
+      {
+        path: routes.household.addUpdate,
+        element: <RegisterView userType="admin" />,
       },
       {
         path: routes.instructions.root,

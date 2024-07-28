@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../store/auth';
 import { useNavigate } from 'react-router-dom';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
 import routes from '../../utils/routes';
 import urls from '../../utils/urls';
@@ -17,6 +17,7 @@ interface CreateLinkProps {
   refetch: () => void;
   setCurrentPage: (arg0: number) => void;
   setDisplayingLink: (link: string, doorNumber: string) => void;
+  mode: 'createPermanent' | 'createTemporary' | 'search';
 }
 
 interface CreateLinkForm {
@@ -27,7 +28,11 @@ const CreateLink: FC<CreateLinkProps> = ({
   refetch,
   setCurrentPage,
   setDisplayingLink,
+  mode,
 }) => {
+  if (mode !== 'createPermanent' && mode !== 'createTemporary') {
+    return <></>;
+  }
   const { t } = useTranslation();
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -36,8 +41,6 @@ const CreateLink: FC<CreateLinkProps> = ({
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [mode, setMode] = useState<'permanent' | 'temporary'>('permanent');
 
   const {
     register,
@@ -58,14 +61,14 @@ const CreateLink: FC<CreateLinkProps> = ({
         },
         body: JSON.stringify({
           doorNumber: data.doorNumber,
-          type: mode,
+          type: mode === 'createPermanent' ? 'permanent' : 'temporary',
         }),
       });
       const responseData = await response.json();
 
       setDisplayingLink(responseData.link, responseData.doorNumber);
       if (response.status === 200) {
-        if (mode === 'permanent') {
+        if (mode === 'createPermanent') {
           setCurrentPage(responseData.currentPage);
           refetch();
         }
@@ -87,8 +90,8 @@ const CreateLink: FC<CreateLinkProps> = ({
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>
-          {mode === 'temporary' && t('Create Temporary Link')}
-          {mode === 'permanent' && t('Create Permanent Link')}
+          {mode === 'createTemporary' && t('Create Temporary Link')}
+          {mode === 'createPermanent' && t('Create Permanent Link')}
         </h2>
         <BaseFormInput
           id="doorNumber"
@@ -102,15 +105,6 @@ const CreateLink: FC<CreateLinkProps> = ({
         />
         <BaseWrapper mode={['align-right']}>
           <BaseButton type="submit">{t('Create')}</BaseButton>
-          <BaseButton
-            mode="flat"
-            type="button"
-            onClick={() =>
-              setMode(mode === 'permanent' ? 'temporary' : 'permanent')
-            }
-          >
-            {t(mode === 'permanent' ? 'Create Temporary' : 'Create Permanent')}
-          </BaseButton>
         </BaseWrapper>
       </form>
     </>

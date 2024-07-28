@@ -16,14 +16,18 @@ import { ChangeEvent, FC, useState } from 'react';
 import useError from '../../../hooks/useError';
 import useLoading from '../../../hooks/useLoading';
 import { Plate } from '../../../models/plate';
+import { UserType } from '../../../models/userType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { useParams } from 'react-router-dom';
 
 interface AddOrUpdatePlateProps {
   plateType: 'own' | 'guest';
   update?: boolean;
   targetPlate?: Plate;
-  refetch: () => any;
-  token: string;
-  mode: 'permanent' | 'temporary';
+  refetch: () => void;
+  userType: UserType;
+  setAskedForDelete?: () => void;
 }
 
 const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
@@ -31,10 +35,19 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   update,
   targetPlate,
   refetch,
-  token,
-  mode,
+  userType,
+  setAskedForDelete,
 }) => {
   const { t } = useTranslation();
+
+  let token = '';
+  let doorNumber = '';
+  if (userType === 'admin') {
+    token = useSelector((state: RootState) => state.auth.token).token;
+    doorNumber = useParams().doorNumber as string;
+  } else {
+    token = useParams().token as string;
+  }
 
   const { setError, setErrors } = useError();
   const { setLoading } = useLoading();
@@ -74,12 +87,20 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
         Authorization: 'Bearer ' + token,
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        UserType: mode,
+        UserType: userType,
       };
 
       const body = JSON.stringify(data);
+      const url =
+        targetUrl() +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
 
-      const response = await fetch(targetUrl(), {
+      const response = await fetch(url, {
         method: update ? 'PUT' : 'POST',
         headers,
         body,
@@ -99,56 +120,8 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
     setLoading(false);
   };
 
-  const [askForDelete, setAskForDelete] = useState(false);
-
-  const deletePlate = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        (plateType === 'own' ? urls.deleteOwnPlate : urls.deleteGuestPlate) +
-          targetPlate?.plateNumber,
-        {
-          method: 'DELETE',
-          headers: { Authorization: 'Bearer ' + token, UserType: mode },
-        }
-      );
-      const responseData = await response.json();
-
-      if (response.status === 200) {
-        refetch();
-      } else {
-        setErrors(responseData.data);
-        throw new Error(responseData.message);
-      }
-    } catch (err: any) {
-      console.log(err);
-      setError(err.message || 'Failed, try later.');
-    }
-    setAskForDelete(false);
-    setLoading(false);
-  };
-
   return (
     <BaseWrapper mode={['vertical']}>
-      <BaseModal
-        open={askForDelete}
-        title={t('Deleting Plate...')}
-        center
-        baseDialog
-        onClose={() => setAskForDelete(false)}
-        menuItems={
-          <>
-            <BaseButton mode="outline" onClick={() => setAskForDelete(false)}>
-              {t('No')}
-            </BaseButton>
-            <BaseButton onClick={deletePlate}>{t('Yes')}</BaseButton>
-          </>
-        }
-      >
-        <h2>{t('Are you sure to delete this plate?')}</h2>
-        <BaseWrapper mode={['align-right']}></BaseWrapper>
-      </BaseModal>
-
       <BaseCard style={{ maxWidth: '18rem', margin: '0' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <BaseFormInput
@@ -213,11 +186,11 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
             <BaseButton type="submit">
               {update ? t('Edit') : t('Add')}
             </BaseButton>
-            {update && (
+            {update && setAskedForDelete && (
               <BaseButton
                 type="button"
                 mode="outline"
-                onClick={() => setAskForDelete(true)}
+                onClick={setAskedForDelete}
               >
                 {t('Delete')}
               </BaseButton>

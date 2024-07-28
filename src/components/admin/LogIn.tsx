@@ -56,7 +56,7 @@ const LogIn: FC = () => {
 
       if (response.status === 200) {
         dispatch(authActions.login(responseData.token));
-        navigate(routes.admin.createLink);
+        navigate(routes.link.listLinks);
       } else {
         throw new Error(responseData.message);
       }

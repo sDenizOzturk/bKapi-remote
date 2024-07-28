@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { PermanentLink } from '../../models/permanentLink';
+import { Household } from '../../models/household';
 import { HTMLMotionProps } from 'framer-motion';
 import {
   BaseButton,
@@ -14,18 +14,18 @@ import useLoading from '../../hooks/useLoading';
 import urls from '../../utils/urls';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import routes from '../../utils/routes';
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '../ui/DeleteIcon';
 
-interface PermanentLinkItemProps extends HTMLMotionProps<'div'> {
-  permanentLink: PermanentLink;
+interface HouseholdItemProps extends HTMLMotionProps<'div'> {
+  household: Household;
   refetch: () => void;
-  setDisplayingLink: (link: string, doorNumber: string) => void;
 }
 
-const PermanentLinkItem: FC<PermanentLinkItemProps> = ({
-  permanentLink,
+const HouseholdItem: FC<HouseholdItemProps> = ({
+  household,
   refetch,
-  setDisplayingLink,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -33,14 +33,16 @@ const PermanentLinkItem: FC<PermanentLinkItemProps> = ({
   const { setError, setErrors } = useError();
   const { setLoading } = useLoading();
 
+  const navigate = useNavigate();
+
   const token = useSelector((state: RootState) => state.auth.token);
 
   const [askForDelete, setAskForDelete] = useState(false);
-  const deletePermanentLink = async () => {
+  const deleteHousehold = async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        urls.deleteLink + permanentLink!.doorNumber,
+        urls.deleteHousehold + household!.doorNumber,
         {
           method: 'DELETE',
           headers: { Authorization: 'Bearer ' + token.token },
@@ -68,20 +70,25 @@ const PermanentLinkItem: FC<PermanentLinkItemProps> = ({
         {...props}
         style={{ width: '14rem', cursor: 'pointer', margin: '0' }}
         onClick={() =>
-          setDisplayingLink(permanentLink.link, permanentLink.doorNumber)
+          navigate(
+            routes.household.addUpdate.replace(
+              ':doorNumber',
+              household.doorNumber
+            )
+          )
         }
       >
-        <BaseWrapper mode={[]} style={{ position: 'relative' }}>
+        <BaseWrapper style={{ position: 'relative' }}>
           <DeleteIcon onClick={() => setAskForDelete(true)} />
           <h3 style={{ fontSize: '1.6rem', textAlign: 'center' }}>
-            {permanentLink.doorNumber}
+            {household.doorNumber}
           </h3>
         </BaseWrapper>
       </BaseCard>
 
       <BaseModal
         open={askForDelete}
-        title={t('Deleting Permanent Key...')}
+        title={t('Deleting Household...')}
         center
         baseDialog
         onClose={() => setAskForDelete(false)}
@@ -90,15 +97,19 @@ const PermanentLinkItem: FC<PermanentLinkItemProps> = ({
             <BaseButton mode="outline" onClick={() => setAskForDelete(false)}>
               {t('No')}
             </BaseButton>
-            <BaseButton onClick={deletePermanentLink}>{t('Yes')}</BaseButton>
+            <BaseButton onClick={deleteHousehold}>{t('Yes')}</BaseButton>
           </>
         }
       >
-        <h2>{t('Are you sure to delete this permanent key?')}</h2>
+        <h2>
+          {t(
+            'Are you sure to delete this household? All the plates and keys under this household will be deleted!'
+          )}
+        </h2>
         <BaseWrapper mode={['align-right']}></BaseWrapper>
       </BaseModal>
     </>
   );
 };
 
-export default PermanentLinkItem;
+export default HouseholdItem;

@@ -1,7 +1,6 @@
 import { BaseButton, BaseWrapper } from 'binak-react-components';
 import ListPlates from '../components/register/plate/ListPlates';
 
-import { useParams } from 'react-router';
 import { FC, useState } from 'react';
 
 import useLoading from '../hooks/useLoading';
@@ -9,13 +8,12 @@ import ListAppKeys from '../components/register/appKeys/ListAppKeys';
 import DisplayInstructions from '../components/instructions/DisplayInstructions';
 import ViewWrapper from '../components/layout/ViewWrapper';
 import { useTranslation } from 'react-i18next';
-
+import { UserType } from '../models/userType';
 interface LinkViewProps {
-  mode: 'permanent' | 'temporary';
+  userType: UserType;
 }
 
-const LinkView: FC<LinkViewProps> = ({ mode }) => {
-  const { token } = useParams();
+const LinkView: FC<LinkViewProps> = ({ userType }) => {
   const [isOwnPlatesLoading, setOwnPlatesLoading] = useState(false);
   const [isGuestPlatesLoading, setGuestPlatesLoading] = useState(false);
   const [isAppKeysLoading, setAppKeysLoading] = useState(false);
@@ -35,21 +33,15 @@ const LinkView: FC<LinkViewProps> = ({ mode }) => {
       >
         <ListPlates
           plateType="own"
-          token={token!}
           setLoading={setOwnPlatesLoading}
-          mode={mode}
+          userType={userType}
         />
         <ListPlates
           plateType="guest"
-          token={token!}
           setLoading={setGuestPlatesLoading}
-          mode={mode}
+          userType={userType}
         />
-        <ListAppKeys
-          token={token!}
-          setLoading={setAppKeysLoading}
-          mode={mode}
-        />
+        <ListAppKeys setLoading={setAppKeysLoading} userType={userType} />
 
         <BaseWrapper mode={['center']} style={{ marginTop: '1rem' }}>
           <BaseButton onClick={() => setShowInstructions(!showInstructions)}>

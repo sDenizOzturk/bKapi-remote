@@ -2,21 +2,20 @@
 const root = 'http://192.168.1.189:4000';
 //const root = 'https://antasya-sunucu.bkapi.site:8081';
 
-const adminRoot = root + '/admin';
-const linkRoot = root + '/link';
-const instructionsRoot = root + '/instructions';
-
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   root: root,
   //ADMIN URLS
-  adminRoot: adminRoot,
-  logInAdmin: adminRoot + '/log-in',
+  logInAdmin: root + '/admin' + '/log-in',
 
   //LINK URLS
-  createLink: linkRoot,
-  listLinks: linkRoot,
-  deleteLink: linkRoot + '/',
+  listLinks: root + '/link/list',
+  createLink: root + '/link',
+  deleteLink: root + '/link' + '/',
+
+  //HOUSEHOLD URLS
+  listHouseholds: root + '/household/list',
+  deleteHousehold: root + '/household/',
 
   //OWN PLATE URLS
   listOwnPlates: root + '/own-plate',
@@ -34,8 +33,8 @@ export default {
   listAppKeys: root + '/app-key',
   postAppKey: root + '/app-key',
   updateAppKey: root + '/app-key/',
-  deleteAppKey: root + '/app-key/',
+  deleteAppKey: root + '/app-key/', 
 
   //INSTRUCTIONS URLS
-  instructionsRoot: instructionsRoot,
+  instructionsRoot: root + '/instructions',
 };

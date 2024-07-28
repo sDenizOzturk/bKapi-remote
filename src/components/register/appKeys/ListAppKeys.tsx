@@ -1,5 +1,10 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import { BaseWrapper, BaseButton, BaseModal } from 'binak-react-components';
+import {
+  BaseWrapper,
+  BaseButton,
+  BaseModal,
+  BaseCard,
+} from 'binak-react-components';
 import AddOrUpdateAppKey from './AddOrUpdateAppKey';
 import { useTranslation } from 'react-i18next';
 
@@ -8,17 +13,29 @@ import AppKeyItem from './AppKeyItem';
 import useError from '../../../hooks/useError';
 import { AppKey } from '../../../models/appKey';
 import { bounce } from '../../../utils/animationVariants';
+import { UserType } from '../../../models/userType';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { useParams } from 'react-router-dom';
 
 interface ListAppKeysProps {
-  token: string;
-  mode: 'permanent' | 'temporary';
+  userType: UserType;
   setLoading: (arg0: boolean) => any;
 }
 
-const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
+const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
   const { t } = useTranslation();
 
-  const { setError } = useError();
+  let token = '';
+  let doorNumber = '';
+  if (userType === 'admin') {
+    token = useSelector((state: RootState) => state.auth.token).token;
+    doorNumber = useParams().doorNumber as string;
+  } else {
+    token = useParams().token as string;
+  }
+
+  const { setError, setErrors } = useError();
 
   const [showAddAppKey, setShowAddAppKey] = useState(false);
   const [updatingAppKey, setUpdatingAppKey] = useState<AppKey | undefined>(
@@ -31,10 +48,18 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(urls.listAppKeys, {
+      const url =
+        urls.listAppKeys +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
+      const response = await fetch(url, {
         headers: {
           Authorization: 'Bearer ' + token,
-          UserType: mode,
+          UserType: userType,
         },
       });
       const responseData = await response.json();
@@ -54,6 +79,43 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
     fetchData();
   }, [fetchData]);
 
+  const [askedForDelete, setAskedForDelete] = useState<AppKey | undefined>(
+    undefined
+  );
+
+  const deleteAppKey = async () => {
+    if (!askedForDelete) return;
+    setLoading(true);
+    try {
+      const url =
+        urls.deleteAppKey +
+        askedForDelete!.fullname +
+        (doorNumber
+          ? '?' +
+            new URLSearchParams({
+              doorNumber,
+            })
+          : '');
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + token, UserType: userType },
+      });
+      const responseData = await response.json();
+
+      if (response.status === 200) {
+        fetchData();
+      } else {
+        setErrors(responseData.data);
+        throw new Error(responseData.message);
+      }
+    } catch (err: any) {
+      console.log(err);
+      setError(err.message || 'Failed, try later.');
+    }
+    setAskedForDelete(undefined);
+    setLoading(false);
+  };
+
   return (
     <>
       <BaseModal open={showAddAppKey} onClose={() => setShowAddAppKey(false)}>
@@ -62,8 +124,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
             setShowAddAppKey(false);
             fetchData();
           }}
-          token={token}
-          mode={mode}
+          userType={userType}
         />
       </BaseModal>
 
@@ -78,8 +139,11 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
             setUpdatingAppKey(undefined);
             fetchData();
           }}
-          token={token}
-          mode={mode}
+          userType={userType}
+          setAskedForDelete={() => {
+            setAskedForDelete(updatingAppKey);
+            setUpdatingAppKey(undefined);
+          }}
         />
       </BaseModal>
 
@@ -108,9 +172,37 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ token, mode, setLoading }) => {
             key={appKey.appKey}
             appKey={appKey}
             onAppKeyClicked={() => setUpdatingAppKey(appKey)}
+            onDeleteKeyClicked={() => setAskedForDelete(appKey)}
           />
         ))}
+        {appKeys.length === 0 && (
+          <BaseCard style={{ margin: '-0.5rem' }}>
+            {t('No keys added')}
+          </BaseCard>
+        )}
       </BaseWrapper>
+
+      <BaseModal
+        open={!!askedForDelete}
+        title={t('Deleting Application Key...')}
+        center
+        baseDialog
+        onClose={() => setAskedForDelete(undefined)}
+        menuItems={
+          <>
+            <BaseButton
+              mode="outline"
+              onClick={() => setAskedForDelete(undefined)}
+            >
+              {t('No')}
+            </BaseButton>
+            <BaseButton onClick={deleteAppKey}>{t('Yes')}</BaseButton>
+          </>
+        }
+      >
+        <h2>{t('Are you sure to delete this application key?')}</h2>
+        <BaseWrapper mode={['align-right']}></BaseWrapper>
+      </BaseModal>
     </>
   );
 };

@@ -1,29 +1,27 @@
-const adminRoot = '/admin';
-const registerRoot = '/register';
-const instructionsRoot = '/instructions';
-
 const admin = {
-  root: adminRoot,
-  logIn: adminRoot + '/log-in',
-  createLink: adminRoot + '/links',
+  root: '/admin',
+  logIn: '/admin' + '/log-in',
 };
-const resident = {
-  root: registerRoot,
+
+const household = {
+  list: '/households',
+  addUpdate: '/household/:doorNumber',
 };
 
 const link = {
-  permanent: 'permanent/:token',
-  temporary: 'temporary/:token',
+  listLinks: '/links',
+  permanent: '/permanent/:token',
+  temporary: '/temporary/:token',
 };
 
 const instructions = {
-  root: instructionsRoot,
+  root: '/instructions',
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   admin,
-  resident,
+  household,
   instructions,
   link,
 };

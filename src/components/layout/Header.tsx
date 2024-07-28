@@ -22,34 +22,25 @@ const Header: FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const tokenValid = isTokenValid(token);
 
-  const adminRoutes = [{ to: routes.admin.createLink, text: t('Links') }];
-  const defaultRoutes = [
-    { to: routes.instructions.root, text: t('Instructions') },
-  ];
+  const displayingRoutes: { to: string; text: string }[] = [];
+
+  if (tokenValid) {
+    displayingRoutes.push({ to: routes.link.listLinks, text: t('Links') });
+    displayingRoutes.push({ to: routes.household.list, text: t('Households') });
+  } else {
+    displayingRoutes.push({ to: routes.admin.logIn, text: t('Log In') });
+    displayingRoutes.push({
+      to: routes.instructions.root,
+      text: t('Instructions'),
+    });
+  }
+
   return (
     <header>
       <nav>
         <ul>
           <li>
-            {!tokenValid && (
-              <NavLink
-                className={({ isActive }) => (isActive ? classes.active : '')}
-                to={routes.admin.logIn}
-              >
-                {t('Log In')}
-              </NavLink>
-            )}
-            {tokenValid &&
-              adminRoutes.map((route) => (
-                <NavLink
-                  key={route.text}
-                  className={({ isActive }) => (isActive ? classes.active : '')}
-                  to={route.to}
-                >
-                  {route.text}
-                </NavLink>
-              ))}
-            {defaultRoutes.map((route) => (
+            {displayingRoutes.map((route) => (
               <NavLink
                 key={route.text}
                 className={({ isActive }) => (isActive ? classes.active : '')}

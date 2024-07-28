@@ -140,12 +140,39 @@ const link = {
   },
 };
 
+const household = {
+  tr: {
+    Households: 'Haneler',
+    'Create or Open': 'Oluştur veya Aç',
+    'Create or Open Household': 'Hane Oluştur veya Haneyi Aç',
+    'No links created': 'Link oluşturulmadı',
+    'No links found': 'Link bulunamadı',
+    'Deleting Household...': 'Hane Siliniyor...',
+    'Are you sure to delete this household? All the plates and keys under this household will be deleted!':
+      'Bu haneyi silmek istediğinizden emin misiniz? Bu haneye ait tüm plakalar ve anahtarlar silinecek!',
+    'Search Household': 'Hane Ara',
+    'Please enter a valid filter text':
+      'Lütfen geçerli bir filtre metni giriniz',
+  },
+  ru: {
+    Households: 'Домохозяйства',
+    'Create or Open': 'Создать или открыть',
+    'Create or Open Household': 'Создать или открыть домохозяйство',
+    'No links created': 'Ссылки не созданы',
+    'No links found': 'Ссылки не найдены',
+    'Deleting Household...': 'Удаление домохозяйства...',
+    'Are you sure to delete this household? All the plates and keys under this household will be deleted!':
+      'Вы уверены, что хотите удалить это хозяйство? Все номера и ключи в этом хозяйстве будут удалены!',
+    'Search Household': 'Поиск по дому',
+    'Please enter a valid filter text': 'Введите допустимый текст фильтра.',
+  },
+};
+
 const registry = {
   tr: {
     "Residents' Vehicles": 'Site Sakinlerine Ait Araçlar',
     "Guests' Vehicles": 'Misafirlere Ait Araçlar',
     'Application Keys': 'Uygulama Anahtarları',
-
     'Drivers Fullname': 'Sürücünün Adı Soyadı',
     'Plate Number': 'Plaka Numarası',
     'Vehicle Information': 'Araç Bilgisi',
@@ -154,10 +181,8 @@ const registry = {
     'Telegram IDs': "Telegram ID'leri",
     "If there is more than one value, put commas (',') between the numbers.":
       "Birden fazla ise değerlerin aralarına virgül (',') koyunuz.",
-
     'Users Fullname': 'Kullanıcının Adı Soyadı',
     'Application Key': 'Uygulama Anahtarı',
-
     'Deleting Plate...': 'Plaka Siliniyor...',
     'Deleting Application Key...': 'Uygulama Anahtarı Siliniyor...',
     'Are you sure to delete this plate?':
@@ -166,6 +191,8 @@ const registry = {
       'Bu uygulama anahtarını silmek istediğinizden emin misiniz?',
     'Show instructions': 'Talimatları göster',
     'Hide instructions': 'Talimatları gizle',
+    'No vehicles added': 'Araç eklenmedi',
+    'No keys added': 'Anahtar eklenmedi',
   },
   ru: {
     "Residents' Vehicles": 'Транспортные средства жителей',
@@ -180,10 +207,8 @@ const registry = {
     'Telegram IDs': 'Идентификаторы телеграмм',
     "If there is more than one value, put commas (',') between the numbers.":
       'Если значений несколько, поставьте запятые («,») между числами.',
-
     'Users Fullname': 'Полное имя пользователя',
     'Application Key': 'Ключ приложения',
-
     'Deleting Plate...': 'Удаление номерного знака...',
     'Deleting Application Key...': 'Удаление ключа приложения...',
     'Are you sure to delete this plate?':
@@ -192,6 +217,8 @@ const registry = {
       'Вы уверены, что удалите этот ключ приложения?',
     'Show instructions': 'Показать инструкции',
     'Hide instructions': 'Скрыть инструкции',
+    'No vehicles added': 'Транспортные средства не добавлены',
+    'No keys added': 'Ключи не добавлены',
   },
 };
 
@@ -204,6 +231,7 @@ const resources = {
       ...validation.tr,
       ...admin.tr,
       ...link.tr,
+      ...household.tr,
       ...registry.tr,
     },
   },
@@ -214,6 +242,7 @@ const resources = {
       ...validation.ru,
       ...admin.ru,
       ...link.ru,
+      ...household.ru,
       ...registry.ru,
     },
   },

@@ -20,7 +20,7 @@ const RootView: FC = () => {
   useEffect(() => {
     if (pathname.substring(0, 7) === '/admin/' || pathname === '/')
       if (tokenValid) {
-        navigate(routes.admin.createLink, { replace: true });
+        navigate(routes.link.listLinks, { replace: true });
       } else {
         navigate(routes.admin.logIn, { replace: true });
       }
