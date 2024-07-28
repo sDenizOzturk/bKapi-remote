@@ -168,6 +168,44 @@ const household = {
   },
 };
 
+const record = {
+  tr: {
+    Records: 'Kayıtlar',
+    'Search Record': 'Kayıt Ara',
+    'Fullname or Plate Number': 'Adı Soyadı veya Plaka Numarası',
+    Date: 'Tarih',
+    'Please enter a valid date (e.g 01.02.2024)':
+      'Lütfen geçerli bir tarih giriniz (örneğin: 01.02.2024)',
+    'No records found': 'Kayıt bulunamadı',
+    Guest: 'Misafir',
+    Resident: 'Site Sakini',
+    Application: 'Uygulama',
+    'Unregistered Plate': 'Kayıtsız Araç',
+    Unknown: 'Bilinmeyen',
+    Entrance: 'Giriş',
+    Exit: 'Çıkış',
+    Pedestrian: 'Yaya',
+  },
+  ru: {
+    Records: 'Записи',
+    'Search Record': 'Поиск записи',
+    'Fullname or Plate Number': 'Полное имя или номерной знак',
+    Date: 'Дата',
+    'Please enter a valid date (e.g 01.02.2024)':
+      'Введите допустимую дату (например, 01.02.2024)',
+    'No records found': 'записей не найдено',
+    Guest: 'Гость',
+    Resident: 'Резидент',
+    Application: 'Приложение',
+    'Unregistered Plate': 'Незарегистрированный номерной знак',
+    Unknown: 'Неизвестный',
+    Entrance: 'Вход',
+    Exit: 'Выход',
+    Pedestrian: 'Пешеход',
+    'Set Today': 'Bugüne ayarla',
+  },
+};
+
 const registry = {
   tr: {
     "Residents' Vehicles": 'Site Sakinlerine Ait Araçlar',
@@ -193,12 +231,12 @@ const registry = {
     'Hide instructions': 'Talimatları gizle',
     'No vehicles added': 'Araç eklenmedi',
     'No keys added': 'Anahtar eklenmedi',
+    'Set the date as today': 'Tarihi bugün olarak ayarla',
   },
   ru: {
     "Residents' Vehicles": 'Транспортные средства жителей',
     "Guests' Vehicles": 'Транспортные средства гостей',
     'Application Keys': 'Ключи приложения',
-
     'Drivers Fullname': 'Полное имя драйвера',
     'Plate Number': 'Номерной знак',
     'Vehicle Information': 'Информация об автомобиле',
@@ -219,6 +257,7 @@ const registry = {
     'Hide instructions': 'Скрыть инструкции',
     'No vehicles added': 'Транспортные средства не добавлены',
     'No keys added': 'Ключи не добавлены',
+    'Set the date as today': 'Установите дату на сегодня',
   },
 };
 
@@ -232,6 +271,7 @@ const resources = {
       ...admin.tr,
       ...link.tr,
       ...household.tr,
+      ...record.tr,
       ...registry.tr,
     },
   },
@@ -243,6 +283,7 @@ const resources = {
       ...admin.ru,
       ...link.ru,
       ...household.ru,
+      ...record.ru,
       ...registry.ru,
     },
   },

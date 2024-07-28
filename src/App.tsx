@@ -6,6 +6,7 @@ import LoginView from './views/LogIn';
 import CreateLinkView from './views/Links';
 import RegisterView from './views/Register';
 import ListHouseholdsView from './views/Households';
+import RecordsView from './views/Records';
 import ErrorView from './views/NotFound';
 import InstructionsView from './views/Instructions';
 
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: routes.household.addUpdate,
         element: <RegisterView userType="admin" />,
+      },
+      {
+        path: routes.records.root,
+        element: <RecordsView />,
       },
       {
         path: routes.instructions.root,

@@ -1,6 +1,6 @@
 import { BaseCard, BaseWrapper } from 'binak-react-components';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { Household } from '../../models/household';
+import { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { PassRecord } from '../../models/record';
 import { bounce } from '../../utils/animationVariants';
 import useLoading from '../../hooks/useLoading';
 import useError from '../../hooks/useError';
@@ -9,26 +9,20 @@ import { RootState } from '../../store';
 import urls from '../../utils/urls';
 import Paginator from '../ui/Paginator';
 import { useTranslation } from 'react-i18next';
-import HouseholdItem from './HouseholdItem';
-import CreateHousehold from './CreateHousehold';
-import FilterHouseholds from './FilterHousehold';
-import TabButtons from '../ui/TabButtons';
+import RecordItem from './RecordItem';
+import FilterRecords from './FilterRecords';
 
-const ListHouseholds: FC = () => {
-  const [households, setHouseholds] = useState<Household[]>([]);
+const ListRecords: FC = () => {
+  const [records, setRecords] = useState<PassRecord[]>([]);
+  const [showDate, setShowDate] = useState(true);
+
+  const scroollTargetRef = useRef(null);
 
   const { t } = useTranslation();
-
   const loading = useSelector((state: RootState) => state.loading.loading);
 
-  const [mode, setMode] = useState<'create' | 'search'>('create');
-
-  const modes = [
-    { name: 'create', buttonText: t('Create or Open') },
-    { name: 'search', buttonText: t('Search') },
-  ];
-
   const [filter, setFilter] = useState('');
+  const [date, setDate] = useState('');
 
   const { setLoading } = useLoading();
   const { setError } = useError();
@@ -45,10 +39,11 @@ const ListHouseholds: FC = () => {
 
     try {
       const url =
-        urls.listHouseholds +
+        urls.listRecords +
         '?' +
         new URLSearchParams({
           filter,
+          date,
           page: currentPage.toString(),
         });
       const response = await fetch(url, {
@@ -59,20 +54,27 @@ const ListHouseholds: FC = () => {
       const responseData = await response.json();
 
       if (response.status === 200) {
-        setHouseholds(responseData.households);
+        setRecords(responseData.records);
         setCurrentPage(responseData.currentPage);
         setTotalPages(responseData.totalPages);
+        setShowDate(!date);
       } else {
         throw new Error(responseData.message);
       }
     } catch (err: any) {
       setError(err.message);
     }
+
     setLoading(false);
   }, [token, filter, refetchCounter]);
 
   const refetchData = () => {
     setRefetchCounter(refetchCounter + 1);
+    const top = (scroollTargetRef as RefObject<any>).current.offsetTop || 0;
+    window.scrollTo({
+      top: top,
+      behavior: 'auto',
+    });
   };
 
   useEffect(() => {
@@ -81,18 +83,18 @@ const ListHouseholds: FC = () => {
 
   return (
     <>
+      <div ref={scroollTargetRef}></div>
       <BaseCard>
-        <TabButtons modes={modes} setMode={setMode} currentMode={mode} />
         <BaseWrapper style={{ minWidth: '20rem' }}>
-          {mode === 'create' && <CreateHousehold />}
-          {mode === 'search' && (
-            <FilterHouseholds
-              setFilter={(val) => {
-                setFilter(val);
-                setCurrentPage(0);
-              }}
-            />
-          )}
+          <FilterRecords
+            initialDate={date}
+            setFilter={(data) => {
+              setFilter(data.filter);
+              setDate(data.date);
+              setCurrentPage(0);
+              refetchData();
+            }}
+          />
         </BaseWrapper>
       </BaseCard>
 
@@ -105,19 +107,18 @@ const ListHouseholds: FC = () => {
           maxWidth: '60rem',
         }}
       >
-        {households.map((household: Household) => (
-          <HouseholdItem
-            whileHover={bounce.s.scale}
+        {records.map((record: PassRecord) => (
+          <RecordItem
             transition={bounce.m.transition}
-            key={household.doorNumber}
-            household={household}
-            refetch={refetchData}
+            key={record.imageUrl}
+            record={record}
+            showDate={showDate}
           />
         ))}
       </BaseWrapper>
-      {!loading && households.length === 0 && (
+      {!loading && records.length === 0 && (
         <BaseCard style={{ marginTop: '-1rem' }}>
-          {filter ? t('No links found') : t('No links created')}
+          {t('No records found')}
         </BaseCard>
       )}
       {totalPages > 1 && (
@@ -132,4 +133,4 @@ const ListHouseholds: FC = () => {
   );
 };
 
-export default ListHouseholds;
+export default ListRecords;

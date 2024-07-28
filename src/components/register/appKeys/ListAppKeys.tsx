@@ -25,6 +25,7 @@ interface ListAppKeysProps {
 
 const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
   const { t } = useTranslation();
+  const loading = useSelector((state: RootState) => state.loading.loading);
 
   let token = '';
   let doorNumber = '';
@@ -175,7 +176,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
             onDeleteKeyClicked={() => setAskedForDelete(appKey)}
           />
         ))}
-        {appKeys.length === 0 && (
+        {!loading && appKeys.length === 0 && (
           <BaseCard style={{ margin: '-0.5rem' }}>
             {t('No keys added')}
           </BaseCard>

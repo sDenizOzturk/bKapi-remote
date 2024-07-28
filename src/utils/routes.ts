@@ -14,6 +14,10 @@ const link = {
   temporary: '/temporary/:token',
 };
 
+const records = {
+  root: '/records',
+};
+
 const instructions = {
   root: '/instructions',
 };
@@ -23,5 +27,6 @@ export default {
   admin,
   household,
   instructions,
+  records,
   link,
 };

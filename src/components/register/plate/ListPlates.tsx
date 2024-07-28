@@ -31,6 +31,7 @@ const ListPlates: FC<ListPlatesProps> = ({
   setLoading,
 }) => {
   const { t } = useTranslation();
+  const loading = useSelector((state: RootState) => state.loading.loading);
 
   let token = '';
   let doorNumber = '';
@@ -191,7 +192,7 @@ const ListPlates: FC<ListPlatesProps> = ({
           />
         ))}
 
-        {plates.length === 0 && (
+        {!loading && plates.length === 0 && (
           <BaseCard style={{ margin: '-0.5rem' }}>
             {t('No vehicles added')}
           </BaseCard>

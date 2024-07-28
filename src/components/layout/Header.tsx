@@ -8,6 +8,7 @@ import routes from '../../utils/routes';
 import { FC } from 'react';
 import { RootState } from '../../store';
 import { isTokenValid } from '../../utils/utils';
+import { useMediaQuery } from 'usehooks-ts';
 
 const languages = [
   { lang: 'tr', label: 'Türkçe' },
@@ -27,6 +28,7 @@ const Header: FC = () => {
   if (tokenValid) {
     displayingRoutes.push({ to: routes.link.listLinks, text: t('Links') });
     displayingRoutes.push({ to: routes.household.list, text: t('Households') });
+    displayingRoutes.push({ to: routes.records.root, text: t('Records') });
   } else {
     displayingRoutes.push({ to: routes.admin.logIn, text: t('Log In') });
     displayingRoutes.push({
@@ -35,9 +37,11 @@ const Header: FC = () => {
     });
   }
 
+  const isPortrait = useMediaQuery('(orientation: portrait)');
+
   return (
     <header>
-      <nav>
+      <nav style={isPortrait ? { width: '100%' } : {}}>
         <ul>
           <li>
             {displayingRoutes.map((route) => (
@@ -58,13 +62,14 @@ const Header: FC = () => {
                 className={
                   i18n.language === language.lang ? classes.active : ''
                 }
+                style={isPortrait ? { padding: '0.5rem', margin: '0' } : {}}
                 onClick={() => {
                   i18n.changeLanguage(language.lang);
                   localStorage.setItem('language', language.lang);
                   navigate(0);
                 }}
               >
-                {language.label}
+                {isPortrait ? language.lang : language.label}
               </button>
             </li>
           ))}

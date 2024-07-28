@@ -1,5 +1,5 @@
-//const root = 'http://localhost:4000';
-const root = 'http://192.168.1.189:4000';
+const root = 'http://localhost:4000';
+//const root = 'http://192.168.1.189:4000';
 //const root = 'https://antasya-sunucu.bkapi.site:8081';
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -17,6 +17,9 @@ export default {
   listHouseholds: root + '/household/list',
   deleteHousehold: root + '/household/',
 
+  //HOUSEHOLD URLS
+  listRecords: root + '/record/list',
+
   //OWN PLATE URLS
   listOwnPlates: root + '/own-plate',
   postOwnPlate: root + '/own-plate',
@@ -33,7 +36,7 @@ export default {
   listAppKeys: root + '/app-key',
   postAppKey: root + '/app-key',
   updateAppKey: root + '/app-key/',
-  deleteAppKey: root + '/app-key/', 
+  deleteAppKey: root + '/app-key/',
 
   //INSTRUCTIONS URLS
   instructionsRoot: root + '/instructions',

@@ -20,6 +20,7 @@ const ListPermantLinks: FC = () => {
   const [permanentLinks, setPermanentLinks] = useState<PermanentLink[]>([]);
 
   const { t } = useTranslation();
+  const loading = useSelector((state: RootState) => state.loading.loading);
 
   const [mode, setMode] = useState<
     'createPermanent' | 'createTemporary' | 'search'
@@ -145,7 +146,7 @@ const ListPermantLinks: FC = () => {
           />
         ))}
       </BaseWrapper>
-      {permanentLinks.length === 0 && (
+      {!loading && permanentLinks.length === 0 && (
         <BaseCard style={{ marginTop: '-1rem' }}>
           {filter ? t('No links found.') : t('No links created.')}
         </BaseCard>

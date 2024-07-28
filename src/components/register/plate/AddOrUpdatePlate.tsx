@@ -5,13 +5,12 @@ import {
   BaseCard,
   BaseButton,
   BaseFormInput,
-  BaseModal,
 } from 'binak-react-components';
 
 import { useForm } from 'react-hook-form';
 
 import urls from '../../../utils/urls';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
 
 import useError from '../../../hooks/useError';
 import useLoading from '../../../hooks/useLoading';
