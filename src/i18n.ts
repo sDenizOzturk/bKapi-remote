@@ -33,7 +33,7 @@ const common = {
 const error = {
   tr: {
     'Failed to fetch': 'Sunucuya bağlanılamadı',
-    'Password is not correct': 'Parola doğru değil',
+    'Password is not correct.': 'Parola doğru değil',
     'An Error Occurred': 'Bir hata alındı',
     'This plate is already added': 'Bu plaka numarası daha önce eklenmiş',
     'A key has already been added for this name before. To add multiple records to the same person, you can add a word such as "2"-"3"-"tablet"-"iOS" to the end of the name.':
@@ -49,7 +49,7 @@ const error = {
   },
   ru: {
     'Failed to fetch': 'Не удалось получить',
-    'Password is not correct': 'Пароль неправильный',
+    'Password is not correct.': 'Пароль неправильный',
     'An Error Occurred': 'Произошла ошибка',
     'This plate is already added': 'Эта табличка уже добавлена',
     'A key has already been added for this name before. To add multiple records to the same person, you can add a word such as "2"-"3"-"tablet"-"iOS" to the end of the name.':

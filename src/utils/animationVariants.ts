@@ -9,7 +9,7 @@ export const bounce = {
     scale: {
       scale: 1.02,
     },
-    transition: { type: 'spring', stifness: 100, mass: 2 },
+    transition: { type: 'spring', stifness: 100, mass: 1.5 },
   },
 };
 

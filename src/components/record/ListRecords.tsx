@@ -83,7 +83,6 @@ const ListRecords: FC = () => {
 
   return (
     <>
-      <div ref={scroollTargetRef}></div>
       <BaseCard>
         <BaseWrapper style={{ minWidth: '20rem' }}>
           <FilterRecords
@@ -97,6 +96,8 @@ const ListRecords: FC = () => {
           />
         </BaseWrapper>
       </BaseCard>
+
+      <div ref={scroollTargetRef}></div>
 
       <BaseWrapper
         mode={['center']}

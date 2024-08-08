@@ -1,9 +1,11 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { PassRecord } from '../../models/record';
 import { HTMLMotionProps } from 'framer-motion';
-import { BaseCard, BaseSpinner, BaseWrapper } from 'binak-react-components';
+import { BaseCard, BaseWrapper } from 'binak-react-components';
 import { useTranslation } from 'react-i18next';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import ImageDisplayer from 'react-image-displayer';
 interface RecordItemProps extends HTMLMotionProps<'div'> {
   record: PassRecord;
   showDate: boolean;
@@ -12,7 +14,7 @@ interface RecordItemProps extends HTMLMotionProps<'div'> {
 const RecordItem: FC<RecordItemProps> = ({ record, showDate, ...props }) => {
   const { t } = useTranslation();
 
-  const [loaded, setLoaded] = useState(false);
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const texts = [];
 
@@ -72,30 +74,21 @@ const RecordItem: FC<RecordItemProps> = ({ record, showDate, ...props }) => {
             </>
           ))}
         </BaseWrapper>
-
-        <BaseWrapper style={{ position: 'relative' }}>
-          <img
-            src={record.imageUrl}
-            style={{
-              visibility: loaded ? 'visible' : 'hidden',
-              width: '100%',
-              height: 'auto',
-              borderBottomLeftRadius: '11px',
-              borderBottomRightRadius: '11px',
-              margin: 0,
-            }}
-            loading="lazy"
-            onLoad={() => setLoaded(true)}
-          />
-          {!loaded && (
-            <BaseWrapper
-              mode={['vertical-center']}
-              style={{ width: '100%', height: '10rem' }}
-            >
-              <BaseSpinner></BaseSpinner>
-            </BaseWrapper>
-          )}
-        </BaseWrapper>
+        <ImageDisplayer
+          url={record.imageUrl}
+          token={token.token}
+          delay={100}
+          enterAnimation={['blur', 1]}
+          imageStyle={{
+            borderBottomLeftRadius: '11px',
+            borderBottomRightRadius: '11px',
+          }}
+          spinner={{
+            color: 'var(--color2)',
+            size: '1rem',
+            spinnerType: 'BeatLoader',
+          }}
+        />
       </BaseCard>
     </>
   );

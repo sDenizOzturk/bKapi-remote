@@ -76,7 +76,7 @@ const LogIn: FC = () => {
           <BaseFormInput
             id="password"
             label={t('Password')}
-            type="password"
+            inputType="password"
             error={errors.password}
             register={register('password', {
               required: true,

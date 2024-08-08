@@ -23,6 +23,7 @@
 - react-i18next
 - usehooks-ts
 - [Bınak React Components](https://github.com/sDenizOzturk/binak-react-components)
+- [React Image Displayer](https://github.com/sDenizOzturk/react-image-displayer)
 
 ## Live URL For Test
 

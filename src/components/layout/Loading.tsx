@@ -6,9 +6,6 @@ import { BaseLoading } from 'binak-react-components';
 const Loading: FC = () => {
   const loading = useSelector((state: RootState) => state.loading.loading);
 
-  if (loading) {
-    return <BaseLoading />;
-  }
-  return null;
+  return <BaseLoading loading={loading} />;
 };
 export default Loading;
