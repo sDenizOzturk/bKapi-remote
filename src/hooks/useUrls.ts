@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
-const root = 'http://localhost:80';
-//const root = 'https://gateway.bkapi.com.tr';
+//const root = 'http://localhost:80';
+const root = 'https://gateway.bkapi.com.tr';
 
 const urls = {
   root: root,

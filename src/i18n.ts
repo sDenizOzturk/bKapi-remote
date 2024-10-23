@@ -33,8 +33,13 @@ const common = {
 };
 
 const error = {
+  en: {
+    'Failed to fetch': 'Failed to connect to server',
+    'fetch failed': 'Failed to connect to building complex',
+  },
   tr: {
     'Failed to fetch': 'Sunucuya bağlanılamadı',
+    'fetch failed': 'Siteye bağlanılamadı',
     'Password is not correct.': 'Parola doğru değil',
     'An Error Occurred': 'Bir hata alındı',
     'This plate is already added': 'Bu plaka numarası daha önce eklenmiş',
@@ -53,7 +58,8 @@ const error = {
       'Bu işlemi test sunucusunda gerçekleştiremezsiniz!',
   },
   ru: {
-    'Failed to fetch': 'Не удалось получить',
+    'Failed to fetch': 'Не удалось подключиться к серверу',
+    'fetch failed': 'Не удалось подключиться к комплексу зданий',
     'Password is not correct.': 'Пароль неправильный',
     'An Error Occurred': 'Произошла ошибка',
     'This plate is already added': 'Эта табличка уже добавлена',
@@ -275,7 +281,11 @@ const registry = {
 };
 
 const resources = {
-  en: {},
+  en: {
+    translation: {
+      ...error.en,
+    },
+  },
   tr: {
     translation: {
       ...common.tr,
