@@ -6,12 +6,13 @@ interface ViewWrapperProps {
   children: ReactNode;
 }
 
-const ViewWrapper: FC<ViewWrapperProps> = ({ children }) => {
+const ViewWrapper: FC<ViewWrapperProps> = ({ children, ...props }) => {
   return (
     <motion.div
       initial={{ opacity: 0.8, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={bounce.s.transition}
+      {...props}
     >
       {children}
     </motion.div>

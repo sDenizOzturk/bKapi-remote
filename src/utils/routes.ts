@@ -1,32 +1,12 @@
-const admin = {
-  root: '/admin',
-  logIn: '/admin' + '/log-in',
+const routes = {
+  auth: '/:target/auth',
+  listHouseholds: '/:target/admin/households',
+  addUpdateHouseHold: '/:target/admin/household/:doorNumber',
+  listLinks: '/:target/admin/links',
+  permanentLinks: '/:target/permanent/:token',
+  temporaryLinks: '/:target/temporary/:token',
+  records: '/:target/admin/records',
+  instructions: '/:target/instructions',
 };
 
-const household = {
-  list: '/households',
-  addUpdate: '/household/:doorNumber',
-};
-
-const link = {
-  listLinks: '/links',
-  permanent: '/permanent/:token',
-  temporary: '/temporary/:token',
-};
-
-const records = {
-  root: '/records',
-};
-
-const instructions = {
-  root: '/instructions',
-};
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
-  admin,
-  household,
-  instructions,
-  records,
-  link,
-};
+export default routes;

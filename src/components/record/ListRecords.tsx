@@ -6,11 +6,11 @@ import useLoading from '../../hooks/useLoading';
 import useError from '../../hooks/useError';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import urls from '../../utils/urls';
 import Paginator from '../ui/Paginator';
 import { useTranslation } from 'react-i18next';
 import RecordItem from './RecordItem';
 import FilterRecords from './FilterRecords';
+import useUrls from '../../hooks/useUrls';
 
 const ListRecords: FC = () => {
   const [records, setRecords] = useState<PassRecord[]>([]);
@@ -34,23 +34,24 @@ const ListRecords: FC = () => {
 
   const [refetchCounter, setRefetchCounter] = useState(0);
 
+  const { url } = useUrls();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const url =
-        urls.listRecords +
-        '?' +
-        new URLSearchParams({
+      const response = await fetch(
+        url('listRecords', {
           filter,
           date,
           page: currentPage.toString(),
-        });
-      const response = await fetch(url, {
-        headers: {
-          Authorization: 'Bearer ' + token.token,
-        },
-      });
+        }),
+        {
+          headers: {
+            Authorization: 'Bearer ' + token.token,
+          },
+        }
+      );
       const responseData = await response.json();
 
       if (response.status === 200) {

@@ -6,12 +6,12 @@ import { authActions } from '../../store/auth';
 import { useNavigate } from 'react-router-dom';
 import { FC } from 'react';
 
-import routes from '../../utils/routes';
-import urls from '../../utils/urls';
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 import { RootState } from '../../store';
 import { BaseWrapper, BaseFormInput, BaseButton } from 'binak-react-components';
+import useRoutes from '../../hooks/useRoutes';
+import useUrls from '../../hooks/useUrls';
 
 interface CreateLinkProps {
   refetch: () => void;
@@ -42,6 +42,10 @@ const CreateLink: FC<CreateLinkProps> = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { route } = useRoutes();
+
+  const { url } = useUrls();
+
   const {
     register,
     handleSubmit,
@@ -52,7 +56,7 @@ const CreateLink: FC<CreateLinkProps> = ({
   const onSubmit = async (data: CreateLinkForm) => {
     setLoading(true);
     try {
-      const response = await fetch(urls.createLink, {
+      const response = await fetch(url('createLink'), {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + token.token,
@@ -75,7 +79,7 @@ const CreateLink: FC<CreateLinkProps> = ({
       } else {
         if (response.status === 401) {
           dispatch(authActions.logout());
-          navigate(routes.admin.logIn);
+          navigate(route('auth'));
         }
         throw new Error(responseData.message);
       }

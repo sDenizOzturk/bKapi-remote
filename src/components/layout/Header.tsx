@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import routes from '../../utils/routes';
 import { CSSProperties, FC } from 'react';
 import { RootState } from '../../store';
 import { isTokenValid } from '../../utils/utils';
 import { useMediaQuery } from 'usehooks-ts';
 import { BaseHeader, headerActiveStyle } from 'binak-react-components';
+import useRoutes from '../../hooks/useRoutes';
 
 const languages = [
   { lang: 'tr', label: 'Türkçe' },
@@ -20,7 +20,11 @@ const Header: FC = () => {
   const navigate = useNavigate();
 
   const token = useSelector((state: RootState) => state.auth.token);
-  const tokenValid = isTokenValid(token);
+
+  const { target } = useParams();
+  const tokenValid = isTokenValid(token) && token.target === target;
+
+  const { route } = useRoutes();
 
   const displayingRoutes: {
     to: string;
@@ -29,13 +33,25 @@ const Header: FC = () => {
   }[] = [];
 
   if (tokenValid) {
-    displayingRoutes.push({ to: routes.link.listLinks, text: t('Links') });
-    displayingRoutes.push({ to: routes.household.list, text: t('Households') });
-    displayingRoutes.push({ to: routes.records.root, text: t('Records') });
-  } else {
-    displayingRoutes.push({ to: routes.admin.logIn, text: t('Log In') });
     displayingRoutes.push({
-      to: routes.instructions.root,
+      to: route('listLinks'),
+      text: t('Links'),
+    });
+    displayingRoutes.push({
+      to: route('listHouseholds'),
+      text: t('Households'),
+    });
+    displayingRoutes.push({
+      to: route('records'),
+      text: t('Records'),
+    });
+  } else {
+    displayingRoutes.push({
+      to: route('auth'),
+      text: t('Log In'),
+    });
+    displayingRoutes.push({
+      to: route('instructions'),
       text: t('Instructions'),
     });
   }

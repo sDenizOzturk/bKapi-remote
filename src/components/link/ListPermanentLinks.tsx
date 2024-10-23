@@ -7,7 +7,6 @@ import useLoading from '../../hooks/useLoading';
 import useError from '../../hooks/useError';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import urls from '../../utils/urls';
 import Paginator from '../ui/Paginator';
 import CreateLink from './CreateLink';
 import FilterLinks from './FilterLinks';
@@ -15,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useCopyToClipboard } from 'usehooks-ts';
 import LinkDialog from './LinkDialog';
 import TabButtons from '../ui/TabButtons';
+import useUrls from '../../hooks/useUrls';
 
 const ListPermantLinks: FC = () => {
   const [permanentLinks, setPermanentLinks] = useState<PermanentLink[]>([]);
@@ -44,22 +44,23 @@ const ListPermantLinks: FC = () => {
 
   const [refetchCounter, setRefetchCounter] = useState(0);
 
+  const { url } = useUrls();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const url =
-        urls.listLinks +
-        '?' +
-        new URLSearchParams({
+      const response = await fetch(
+        url('listLinks', {
           filter,
           page: currentPage.toString(),
-        });
-      const response = await fetch(url, {
-        headers: {
-          Authorization: 'Bearer ' + token.token,
-        },
-      });
+        }),
+        {
+          headers: {
+            Authorization: 'Bearer ' + token.token,
+          },
+        }
+      );
       const responseData = await response.json();
 
       if (response.status === 200) {

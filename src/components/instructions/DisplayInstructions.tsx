@@ -2,12 +2,12 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 
-import urls from '../../utils/urls';
 import { BaseWrapper } from 'binak-react-components';
 import AppInstructions from './AppInstructions';
 import TelegramInstructions from './TelegramInstructions';
 import Rules from './Rules';
 import { Instructions } from '../../models/instructions';
+import useUrls from '../../hooks/useUrls';
 
 const DisplayInstructions: FC = () => {
   const { setError } = useError();
@@ -15,11 +15,13 @@ const DisplayInstructions: FC = () => {
 
   const [instructions, setInstructions] = useState<Instructions>();
 
+  const { url } = useUrls();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const response = await fetch(urls.instructionsRoot);
+      const response = await fetch(url('instructionsRoot'));
       const responseData = await response.json();
 
       if (response.status === 200) {

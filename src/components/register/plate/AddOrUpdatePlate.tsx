@@ -8,8 +8,6 @@ import {
 } from 'binak-react-components';
 
 import { useForm } from 'react-hook-form';
-
-import urls from '../../../utils/urls';
 import { ChangeEvent, FC } from 'react';
 
 import useError from '../../../hooks/useError';
@@ -19,6 +17,7 @@ import { UserType } from '../../../models/userType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useParams } from 'react-router-dom';
+import useUrls from '../../../hooks/useUrls';
 
 interface AddOrUpdatePlateProps {
   plateType: 'own' | 'guest';
@@ -38,6 +37,8 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   setAskedForDelete,
 }) => {
   const { t } = useTranslation();
+
+  const { url } = useUrls();
 
   let token = '';
   let doorNumber = '';
@@ -68,12 +69,12 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   const targetUrl = () => {
     if (plateType === 'own') {
       return update
-        ? urls.updateOwnPlate + targetPlate!.plateNumber
-        : urls.postOwnPlate;
+        ? url('updateOwnPlate') + targetPlate!.plateNumber
+        : url('postOwnPlate');
     } else if (plateType === 'guest') {
       return update
-        ? urls.updateGuestPlate + targetPlate!.plateNumber
-        : urls.postGuestPlate;
+        ? url('updateGuestPlate') + targetPlate!.plateNumber
+        : url('postGuestPlate');
     }
     new Error('unkown plate type!');
     return '';

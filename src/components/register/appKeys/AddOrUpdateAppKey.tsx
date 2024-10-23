@@ -8,7 +8,6 @@ import {
 } from 'binak-react-components';
 import { useForm } from 'react-hook-form';
 
-import urls from '../../../utils/urls';
 import { ChangeEvent, FC } from 'react';
 
 import useError from '../../../hooks/useError';
@@ -18,6 +17,7 @@ import { UserType } from '../../../models/userType';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { RootState } from '../../../store';
+import useUrls from '../../../hooks/useUrls';
 
 interface AddOrUpdateAppKeyProps {
   update?: boolean;
@@ -48,6 +48,8 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
   const { setError, setErrors } = useError();
   const { setLoading } = useLoading();
 
+  const { url } = useUrls();
+
   const defaultVaules = () => {
     if (!update) return {};
     return targetAppKey;
@@ -73,17 +75,17 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
       };
       const body = JSON.stringify(data);
 
-      const url =
-        (update
-          ? urls.updateAppKey + targetAppKey!.fullname
-          : urls.postAppKey) +
-        (doorNumber
-          ? '?' +
-            new URLSearchParams({
-              doorNumber,
-            })
-          : '');
-      const response = await fetch(url, {
+      const _url = update
+        ? url('updateAppKey') + targetAppKey!.fullname
+        : url('postAppKey') +
+          (doorNumber
+            ? '?' +
+              new URLSearchParams({
+                doorNumber,
+              })
+            : '');
+
+      const response = await fetch(_url, {
         method: update ? 'PUT' : 'POST',
         headers,
         body,

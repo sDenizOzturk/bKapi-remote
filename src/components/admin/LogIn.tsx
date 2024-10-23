@@ -8,15 +8,14 @@ import {
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import urls from '../../utils/urls';
-import routes from '../../utils/routes';
-
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../store/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
 import { FC } from 'react';
+import useRoutes from '../../hooks/useRoutes';
+import useUrls from '../../hooks/useUrls';
 
 interface LogInForm {
   password: string;
@@ -32,6 +31,12 @@ const LogIn: FC = () => {
 
   const { t } = useTranslation();
 
+  const { route } = useRoutes();
+
+  const { url } = useUrls();
+
+  const { target } = useParams();
+
   const {
     register,
     handleSubmit,
@@ -42,7 +47,7 @@ const LogIn: FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(urls.logInAdmin, {
+      const response = await fetch(url('logInAdmin'), {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -55,8 +60,9 @@ const LogIn: FC = () => {
       const responseData = await response.json();
 
       if (response.status === 200) {
+        responseData.token.target = target;
         dispatch(authActions.login(responseData.token));
-        navigate(routes.link.listLinks);
+        navigate(route('listLinks'));
       } else {
         throw new Error(responseData.message);
       }

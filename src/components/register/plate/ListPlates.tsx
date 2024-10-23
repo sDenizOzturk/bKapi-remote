@@ -8,16 +8,17 @@ import {
 import AddOrUpdatePlate from './AddOrUpdatePlate';
 import { useTranslation } from 'react-i18next';
 
-import urls from '../../../utils/urls';
 import PlateItem from './PlateItem';
 import useError from '../../../hooks/useError';
 import { Plate } from '../../../models/plate';
 import { bounce } from '../../../utils/animationVariants';
-import routes from '../../../utils/routes';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { UserType } from '../../../models/userType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import useRoutes from '../../../hooks/useRoutes';
+import useUrls from '../../../hooks/useUrls';
 
 interface ListPlatesProps {
   plateType: 'own' | 'guest';
@@ -32,6 +33,8 @@ const ListPlates: FC<ListPlatesProps> = ({
 }) => {
   const { t } = useTranslation();
   const loading = useSelector((state: RootState) => state.loading.loading);
+
+  const { url } = useUrls();
 
   let token = '';
   let doorNumber = '';
@@ -51,12 +54,14 @@ const ListPlates: FC<ListPlatesProps> = ({
 
   const navigate = useNavigate();
 
+  const { route } = useRoutes();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const url =
-        (plateType === 'own' ? urls.listOwnPlates : urls.listGuestPlates) +
+      const _url =
+        (plateType === 'own' ? url('listOwnPlates') : url('listGuestPlates')) +
         (doorNumber
           ? '?' +
             new URLSearchParams({
@@ -66,7 +71,7 @@ const ListPlates: FC<ListPlatesProps> = ({
 
       console.log(url);
 
-      const response = await fetch(url, {
+      const response = await fetch(_url, {
         headers: {
           Authorization: 'Bearer ' + token,
           UserType: userType,
@@ -81,7 +86,7 @@ const ListPlates: FC<ListPlatesProps> = ({
       }
     } catch (err: any) {
       setError(err.message);
-      navigate(routes.instructions.root);
+      navigate(route('instructions'));
     }
     setLoading(false);
   }, [plateType, setError, setLoading, token]);
@@ -97,8 +102,10 @@ const ListPlates: FC<ListPlatesProps> = ({
   const deletePlate = async () => {
     setLoading(true);
     try {
-      const url =
-        (plateType === 'own' ? urls.deleteOwnPlate : urls.deleteGuestPlate) +
+      const _url =
+        (plateType === 'own'
+          ? url('deleteOwnPlate')
+          : url('deleteGuestPlate')) +
         askedForDelete?.plateNumber +
         (doorNumber
           ? '?' +
@@ -106,7 +113,7 @@ const ListPlates: FC<ListPlatesProps> = ({
               doorNumber,
             })
           : '');
-      const response = await fetch(url, {
+      const response = await fetch(_url, {
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + token, UserType: userType },
       });

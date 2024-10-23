@@ -11,10 +11,10 @@ import { useTranslation } from 'react-i18next';
 
 import useError from '../../hooks/useError';
 import useLoading from '../../hooks/useLoading';
-import urls from '../../utils/urls';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import DeleteIcon from '../ui/DeleteIcon';
+import useUrls from '../../hooks/useUrls';
 
 interface PermanentLinkItemProps extends HTMLMotionProps<'div'> {
   permanentLink: PermanentLink;
@@ -35,12 +35,14 @@ const PermanentLinkItem: FC<PermanentLinkItemProps> = ({
 
   const token = useSelector((state: RootState) => state.auth.token);
 
+  const { url } = useUrls();
+
   const [askForDelete, setAskForDelete] = useState(false);
   const deletePermanentLink = async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        urls.deleteLink + permanentLink!.doorNumber,
+        url('deleteLink') + permanentLink!.doorNumber,
         {
           method: 'DELETE',
           headers: { Authorization: 'Bearer ' + token.token },

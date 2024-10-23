@@ -1,29 +1,41 @@
 import { FC, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import routes from '../utils/routes';
 import Header from '../components/layout/Header';
 import Error from '../components/layout/Error';
 import Loading from '../components/layout/Loading';
 import Footer from '../components/layout/Footer';
 import { RootState } from '../store';
 import { isTokenValid } from '../utils/utils';
+import useRoutes from '../hooks/useRoutes';
 
 const RootView: FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
-  const tokenValid = isTokenValid(token);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const { route } = useRoutes();
+
+  const { target } = useParams();
+
+  const tokenValid = isTokenValid(token) && token.target === target;
+
   useEffect(() => {
-    if (pathname.substring(0, 7) === '/admin/' || pathname === '/')
+    if (pathname === '/' + target) {
       if (tokenValid) {
-        navigate(routes.link.listLinks, { replace: true });
+        navigate(route('listLinks'), { replace: true });
       } else {
-        navigate(routes.admin.logIn, { replace: true });
+        navigate(route('auth'), { replace: true });
       }
+    }
+
+    if (pathname.includes('/admin/') && !tokenValid)
+      navigate(route('auth'), { replace: true });
+
+    if (pathname.includes('/auth/') && tokenValid)
+      navigate(route('listLinks'), { replace: true });
   }, [navigate, pathname, tokenValid]);
 
   return (

@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 const common = {
   tr: {
+    'Home Page': 'Ana Sayfa',
     Create: 'Oluştur',
     Okay: 'Tamam',
     Yes: 'Evet',
@@ -16,6 +17,7 @@ const common = {
     'Open Link': 'Bağlantıyı Aç',
   },
   ru: {
+    'Home Page': 'Домашняя страница',
     Create: 'Создавать',
     Okay: 'Хорошо',
     Yes: 'Да',
@@ -46,6 +48,9 @@ const error = {
     'A permanent link has already been created before for this door number!':
       'Bu kapı numarası için daha önce oluşturuluş bir kalıcı bağlantı bulunmaktadır!',
     'Link is not valid!': 'Link geçerli değil!',
+    'Building complex does not exist!': 'Sistemde bu site bulunmuyor!',
+    'You cannot perform that operation on the test server!':
+      'Bu işlemi test sunucusunda gerçekleştiremezsiniz!',
   },
   ru: {
     'Failed to fetch': 'Не удалось получить',
@@ -62,6 +67,10 @@ const error = {
     'A permanent link has already been created before for this door number!':
       'Для этого номера двери уже была создана постоянная ссылка!',
     'Link is not valid!': 'Ссылка недействительна!',
+    'Building complex does not exist!':
+      'Строительного комплекса не существует!',
+    'You cannot perform that operation on the test server!':
+      'Эту операцию невозможно выполнить на тестовом сервере!',
   },
 };
 

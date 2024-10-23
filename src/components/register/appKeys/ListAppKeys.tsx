@@ -8,7 +8,6 @@ import {
 import AddOrUpdateAppKey from './AddOrUpdateAppKey';
 import { useTranslation } from 'react-i18next';
 
-import urls from '../../../utils/urls';
 import AppKeyItem from './AppKeyItem';
 import useError from '../../../hooks/useError';
 import { AppKey } from '../../../models/appKey';
@@ -17,6 +16,7 @@ import { UserType } from '../../../models/userType';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useParams } from 'react-router-dom';
+import useUrls from '../../../hooks/useUrls';
 
 interface ListAppKeysProps {
   userType: UserType;
@@ -45,19 +45,22 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
 
   const [appKeys, setAppKeys] = useState<AppKey[]>([]);
 
+  const { url } = useUrls();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const url =
-        urls.listAppKeys +
-        (doorNumber
-          ? '?' +
-            new URLSearchParams({
+      const _url = url(
+        'listAppKeys',
+        doorNumber
+          ? {
               doorNumber,
-            })
-          : '');
-      const response = await fetch(url, {
+            }
+          : undefined
+      );
+
+      const response = await fetch(_url, {
         headers: {
           Authorization: 'Bearer ' + token,
           UserType: userType,
@@ -88,8 +91,8 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
     if (!askedForDelete) return;
     setLoading(true);
     try {
-      const url =
-        urls.deleteAppKey +
+      const _url =
+        url('deleteAppKey') +
         askedForDelete!.fullname +
         (doorNumber
           ? '?' +
@@ -97,7 +100,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
               doorNumber,
             })
           : '');
-      const response = await fetch(url, {
+      const response = await fetch(_url, {
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + token, UserType: userType },
       });

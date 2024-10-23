@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { FC } from 'react';
 
-import routes from '../../utils/routes';
 import { BaseWrapper, BaseFormInput, BaseButton } from 'binak-react-components';
+import useRoute from '../../hooks/useRoutes';
 
 interface CreateHouseholdForm {
   doorNumber: string;
@@ -14,6 +14,8 @@ const CreateHousehold: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const { route } = useRoute();
+
   const {
     register,
     handleSubmit,
@@ -22,7 +24,7 @@ const CreateHousehold: FC = () => {
 
   const onSubmit = async (data: CreateHouseholdForm) => {
     navigate(
-      routes.household.addUpdate.replace(':doorNumber', data.doorNumber)
+      route('addUpdateHouseHold').replace(':doorNumber', data.doorNumber)
     );
   };
 

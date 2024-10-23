@@ -6,13 +6,13 @@ import useLoading from '../../hooks/useLoading';
 import useError from '../../hooks/useError';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import urls from '../../utils/urls';
 import Paginator from '../ui/Paginator';
 import { useTranslation } from 'react-i18next';
 import HouseholdItem from './HouseholdItem';
 import CreateHousehold from './CreateHousehold';
 import FilterHouseholds from './FilterHousehold';
 import TabButtons from '../ui/TabButtons';
+import useUrls from '../../hooks/useUrls';
 
 const ListHouseholds: FC = () => {
   const [households, setHouseholds] = useState<Household[]>([]);
@@ -40,22 +40,23 @@ const ListHouseholds: FC = () => {
 
   const [refetchCounter, setRefetchCounter] = useState(0);
 
+  const { url } = useUrls();
+
   const fetchData = useCallback(async () => {
     setLoading(true);
 
     try {
-      const url =
-        urls.listHouseholds +
-        '?' +
-        new URLSearchParams({
+      const response = await fetch(
+        url('listHouseholds', {
           filter,
           page: currentPage.toString(),
-        });
-      const response = await fetch(url, {
-        headers: {
-          Authorization: 'Bearer ' + token.token,
-        },
-      });
+        }),
+        {
+          headers: {
+            Authorization: 'Bearer ' + token.token,
+          },
+        }
+      );
       const responseData = await response.json();
 
       if (response.status === 200) {

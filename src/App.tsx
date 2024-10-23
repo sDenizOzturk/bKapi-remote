@@ -11,44 +11,49 @@ import ErrorView from './views/NotFound';
 import InstructionsView from './views/Instructions';
 
 import routes from './utils/routes';
+import IndexView from './views/Index';
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <IndexView />,
+  },
+  {
+    path: '/:target/',
     element: <RootView />,
     errorElement: <ErrorView />,
     id: 'root',
     children: [
       {
-        path: routes.admin.logIn,
+        path: routes.auth,
         element: <LoginView />,
       },
       {
-        path: routes.link.listLinks,
+        path: routes.listLinks,
         element: <CreateLinkView />,
       },
       {
-        path: routes.link.temporary,
+        path: routes.temporaryLinks,
         element: <RegisterView userType="temporary" />,
       },
       {
-        path: routes.link.permanent,
+        path: routes.permanentLinks,
         element: <RegisterView userType="permanent" />,
       },
       {
-        path: routes.household.list,
+        path: routes.listHouseholds,
         element: <ListHouseholdsView />,
       },
       {
-        path: routes.household.addUpdate,
+        path: routes.addUpdateHouseHold,
         element: <RegisterView userType="admin" />,
       },
       {
-        path: routes.records.root,
+        path: routes.records,
         element: <RecordsView />,
       },
       {
-        path: routes.instructions.root,
+        path: routes.instructions,
         element: <InstructionsView />,
       },
     ],
