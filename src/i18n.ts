@@ -303,9 +303,22 @@ const resources = {
 };
 
 let lng = localStorage.getItem('language');
+
+const userLang = navigator.language;
+
+console.log('userLang', navigator.languages);
+
 if (!lng) {
-  lng = 'tr';
-  localStorage.setItem('language', 'tr');
+  if (userLang === 'tr' || userLang.startsWith('tr-')) {
+    lng = 'tr';
+    localStorage.setItem('language', 'tr');
+  } else if (userLang === 'ru' || userLang.startsWith('ru-')) {
+    lng = 'ru';
+    localStorage.setItem('language', 'ru');
+  } else {
+    lng = 'en';
+    localStorage.setItem('language', 'en');
+  }
 }
 
 i18n.use(initReactI18next).init({
