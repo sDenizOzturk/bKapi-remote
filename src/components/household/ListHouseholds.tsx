@@ -21,7 +21,7 @@ const ListHouseholds: FC = () => {
 
   const loading = useSelector((state: RootState) => state.loading.loading);
 
-  const [mode, setMode] = useState<'create' | 'search'>('create');
+  const [mode, setMode] = useState<'create' | 'search'>('search');
 
   const modes = [
     { name: 'create', buttonText: t('Create or Open') },

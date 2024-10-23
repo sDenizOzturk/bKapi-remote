@@ -162,6 +162,8 @@ const household = {
     'Search Household': 'Hane Ara',
     'Please enter a valid filter text':
       'Lütfen geçerli bir filtre metni giriniz',
+    'Door Number / Fullname / Plate Number':
+      'Kapı Numarası / Adı Soyadı / Plaka Numarası',
   },
   ru: {
     Households: 'Домохозяйства',
@@ -174,6 +176,8 @@ const household = {
       'Вы уверены, что хотите удалить это хозяйство? Все номера и ключи в этом хозяйстве будут удалены!',
     'Search Household': 'Поиск по дому',
     'Please enter a valid filter text': 'Введите допустимый текст фильтра.',
+    'Door Number / Fullname / Plate Number':
+      'Номер двери / Полное имя / Номерной знак',
   },
 };
 

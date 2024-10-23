@@ -30,7 +30,7 @@ const FilterHouseholds: FC<FilterHouseholdProps> = ({ setFilter }) => {
         <h2>{t('Search Household')}</h2>
         <BaseFormInput
           id="filter"
-          label={t('Door Number')}
+          label={t('Door Number / Fullname / Plate Number')}
           error={errors.filter}
           register={register('filter', {
             maxLength: 50,
