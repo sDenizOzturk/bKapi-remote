@@ -1,22 +1,22 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   BaseWrapper,
   BaseButton,
   BaseModal,
   BaseCard,
-} from 'binak-react-components';
-import AddOrUpdateAppKey from './AddOrUpdateAppKey';
-import { useTranslation } from 'react-i18next';
+} from "binak-react-components";
+import AddOrUpdateAppKey from "./AddOrUpdateAppKey";
+import { useTranslation } from "react-i18next";
 
-import AppKeyItem from './AppKeyItem';
-import useError from '../../../hooks/useError';
-import { AppKey } from '../../../models/appKey';
-import { bounce } from '../../../utils/animationVariants';
-import { UserType } from '../../../models/userType';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { useParams } from 'react-router-dom';
-import useUrls from '../../../hooks/useUrls';
+import AppKeyItem from "./AppKeyItem";
+import useError from "../../../hooks/useError";
+import { AppKey } from "../../../models/appKey";
+import { bounce } from "../../../utils/animationVariants";
+import { UserType } from "../../../models/userType";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { useParams } from "react-router-dom";
+import useUrls from "../../../hooks/useUrls";
 
 interface ListAppKeysProps {
   userType: UserType;
@@ -27,9 +27,9 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
   const { t } = useTranslation();
   const loading = useSelector((state: RootState) => state.loading.loading);
 
-  let token = '';
-  let doorNumber = '';
-  if (userType === 'admin') {
+  let token = "";
+  let doorNumber = "";
+  if (userType === "admin") {
     token = useSelector((state: RootState) => state.auth.token).token;
     doorNumber = useParams().doorNumber as string;
   } else {
@@ -52,7 +52,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
 
     try {
       const _url = url(
-        'listAppKeys',
+        "listAppKeys",
         doorNumber
           ? {
               doorNumber,
@@ -62,7 +62,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
 
       const response = await fetch(_url, {
         headers: {
-          Authorization: 'Bearer ' + token,
+          Authorization: "Bearer " + token,
           UserType: userType,
         },
       });
@@ -92,17 +92,17 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
     setLoading(true);
     try {
       const _url =
-        url('deleteAppKey') +
+        url("deleteAppKey") +
         askedForDelete!.fullname +
         (doorNumber
-          ? '?' +
+          ? "?" +
             new URLSearchParams({
               doorNumber,
             })
-          : '');
+          : "");
       const response = await fetch(_url, {
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + token, UserType: userType },
+        method: "DELETE",
+        headers: { Authorization: "Bearer " + token, UserType: userType },
       });
       const responseData = await response.json();
 
@@ -114,7 +114,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
       }
     } catch (err: any) {
       console.log(err);
-      setError(err.message || 'Failed, try later.');
+      setError(err.message || "Failed, try later.");
     }
     setAskedForDelete(undefined);
     setLoading(false);
@@ -122,7 +122,11 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
 
   return (
     <>
-      <BaseModal open={showAddAppKey} onClose={() => setShowAddAppKey(false)}>
+      <BaseModal
+        center
+        open={showAddAppKey}
+        onClose={() => setShowAddAppKey(false)}
+      >
         <AddOrUpdateAppKey
           refetch={() => {
             setShowAddAppKey(false);
@@ -133,6 +137,7 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
       </BaseModal>
 
       <BaseModal
+        center
         open={!!updatingAppKey}
         onClose={() => setUpdatingAppKey(undefined)}
       >
@@ -151,22 +156,22 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
         />
       </BaseModal>
 
-      <BaseWrapper mode={['vertical', 'center']}>
-        <BaseWrapper mode={['horizontal']}>
-          <h1>{t('Application Keys')}</h1>
+      <BaseWrapper mode={["vertical", "center"]}>
+        <BaseWrapper mode={["horizontal"]}>
+          <h1>{t("Application Keys")}</h1>
           <BaseButton mode="outline" onClick={() => setShowAddAppKey(true)}>
-            {t('Add')}
+            {t("Add")}
           </BaseButton>
         </BaseWrapper>
       </BaseWrapper>
 
       <BaseWrapper
-        mode={['center']}
+        mode={["center"]}
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          maxWidth: '40rem',
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          maxWidth: "40rem",
         }}
       >
         {appKeys.map((appKey: AppKey) => (
@@ -180,15 +185,15 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
           />
         ))}
         {!loading && appKeys.length === 0 && (
-          <BaseCard style={{ margin: '-0.5rem' }}>
-            {t('No keys added')}
+          <BaseCard style={{ margin: "-0.5rem" }}>
+            {t("No keys added")}
           </BaseCard>
         )}
       </BaseWrapper>
 
       <BaseModal
         open={!!askedForDelete}
-        title={t('Deleting Application Key...')}
+        title={t("Deleting Application Key...")}
         center
         baseDialog
         onClose={() => setAskedForDelete(undefined)}
@@ -198,14 +203,14 @@ const ListAppKeys: FC<ListAppKeysProps> = ({ userType, setLoading }) => {
               mode="outline"
               onClick={() => setAskedForDelete(undefined)}
             >
-              {t('No')}
+              {t("No")}
             </BaseButton>
-            <BaseButton onClick={deleteAppKey}>{t('Yes')}</BaseButton>
+            <BaseButton onClick={deleteAppKey}>{t("Yes")}</BaseButton>
           </>
         }
       >
-        <h2>{t('Are you sure to delete this application key?')}</h2>
-        <BaseWrapper mode={['align-right']}></BaseWrapper>
+        <h2>{t("Are you sure to delete this application key?")}</h2>
+        <BaseWrapper mode={["align-right"]}></BaseWrapper>
       </BaseModal>
     </>
   );

@@ -1,18 +1,18 @@
-import { BaseCard, BaseWrapper } from 'binak-react-components';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { Household } from '../../models/household';
-import { bounce } from '../../utils/animationVariants';
-import useLoading from '../../hooks/useLoading';
-import useError from '../../hooks/useError';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import Paginator from '../ui/Paginator';
-import { useTranslation } from 'react-i18next';
-import HouseholdItem from './HouseholdItem';
-import CreateHousehold from './CreateHousehold';
-import FilterHouseholds from './FilterHousehold';
-import TabButtons from '../ui/TabButtons';
-import useUrls from '../../hooks/useUrls';
+import { BaseCard, BaseWrapper } from "binak-react-components";
+import { FC, useCallback, useEffect, useState } from "react";
+import { Household } from "../../models/household";
+import { bounce } from "../../utils/animationVariants";
+import useLoading from "../../hooks/useLoading";
+import useError from "../../hooks/useError";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import Paginator from "../ui/Paginator";
+import { useTranslation } from "react-i18next";
+import HouseholdItem from "./HouseholdItem";
+import CreateHousehold from "./CreateHousehold";
+import FilterHouseholds from "./FilterHousehold";
+import TabButtons from "../ui/TabButtons";
+import useUrls from "../../hooks/useUrls";
 
 const ListHouseholds: FC = () => {
   const [households, setHouseholds] = useState<Household[]>([]);
@@ -21,14 +21,14 @@ const ListHouseholds: FC = () => {
 
   const loading = useSelector((state: RootState) => state.loading.loading);
 
-  const [mode, setMode] = useState<'create' | 'search'>('search');
+  const [mode, setMode] = useState<"create" | "search">("search");
 
   const modes = [
-    { name: 'create', buttonText: t('Create or Open') },
-    { name: 'search', buttonText: t('Search') },
+    { name: "create", buttonText: t("Create") },
+    { name: "search", buttonText: t("Search") },
   ];
 
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState("");
 
   const { setLoading } = useLoading();
   const { setError } = useError();
@@ -47,20 +47,26 @@ const ListHouseholds: FC = () => {
 
     try {
       const response = await fetch(
-        url('listHouseholds', {
+        url("listHouseholds", {
           filter,
           page: currentPage.toString(),
         }),
         {
           headers: {
-            Authorization: 'Bearer ' + token.token,
+            Authorization: "Bearer " + token.token,
           },
         }
       );
       const responseData = await response.json();
 
       if (response.status === 200) {
-        setHouseholds(responseData.households);
+        const householdsWithKey = responseData.households.map(
+          (household: any, index: number) => ({
+            ...household,
+            key: `${Date.now()}_${index}`,
+          })
+        );
+        setHouseholds(householdsWithKey);
         setCurrentPage(responseData.currentPage);
         setTotalPages(responseData.totalPages);
       } else {
@@ -84,9 +90,9 @@ const ListHouseholds: FC = () => {
     <>
       <BaseCard>
         <TabButtons modes={modes} setMode={setMode} currentMode={mode} />
-        <BaseWrapper style={{ minWidth: '20rem' }}>
-          {mode === 'create' && <CreateHousehold />}
-          {mode === 'search' && (
+        <BaseWrapper style={{ minWidth: "20rem" }}>
+          {mode === "create" && <CreateHousehold />}
+          {mode === "search" && (
             <FilterHouseholds
               setFilter={(val) => {
                 setFilter(val);
@@ -98,27 +104,27 @@ const ListHouseholds: FC = () => {
       </BaseCard>
 
       <BaseWrapper
-        mode={['center']}
+        mode={["center"]}
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          maxWidth: '60rem',
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          maxWidth: "60rem",
         }}
       >
         {households.map((household: Household) => (
           <HouseholdItem
             whileHover={bounce.s.scale}
             transition={bounce.m.transition}
-            key={household.doorNumber}
+            key={household.key}
             household={household}
             refetch={refetchData}
           />
         ))}
       </BaseWrapper>
       {!loading && households.length === 0 && (
-        <BaseCard style={{ marginTop: '-1rem' }}>
-          {filter ? t('No links found') : t('No links created')}
+        <BaseCard style={{ marginTop: "-1rem" }}>
+          {filter ? t("No links found") : t("No links created")}
         </BaseCard>
       )}
       {totalPages > 1 && (

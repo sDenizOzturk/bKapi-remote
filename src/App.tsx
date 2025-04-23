@@ -1,36 +1,39 @@
-import './App.css';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import "./App.css";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 
-import RootView from './views/Root';
-import LoginView from './views/LogIn';
-import CreateLinkView from './views/Links';
-import RegisterView from './views/Register';
-import ListHouseholdsView from './views/Households';
-import RecordsView from './views/Records';
-import ErrorView from './views/NotFound';
-import InstructionsView from './views/Instructions';
+import RootView from "./views/Root";
+import LoginView from "./views/LogIn";
+import ListHVehicleInsideView from "./views/VehicleInside";
+import RegisterView from "./views/Register";
+import ListHouseholdsView from "./views/Households";
+import RecordsView from "./views/Records";
+import ErrorView from "./views/NotFound";
 
-import routes from './utils/routes';
-import IndexView from './views/Index';
+import routes from "./utils/routes";
+import IndexView from "./views/Index";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <IndexView />,
   },
   {
-    path: '/:target/',
+    path: "/:target/",
     element: <RootView />,
     errorElement: <ErrorView />,
-    id: 'root',
+    id: "root",
     children: [
       {
         path: routes.auth,
         element: <LoginView />,
       },
       {
-        path: routes.listLinks,
-        element: <CreateLinkView />,
+        path: routes.listVehiclesInside,
+        element: <ListHVehicleInsideView />,
       },
       {
         path: routes.temporaryLinks,
@@ -53,8 +56,8 @@ const router = createBrowserRouter([
         element: <RecordsView />,
       },
       {
-        path: routes.instructions,
-        element: <InstructionsView />,
+        path: "*",
+        element: <Navigate to={"/"} replace />,
       },
     ],
   },

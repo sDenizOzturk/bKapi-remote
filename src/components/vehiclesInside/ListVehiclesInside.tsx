@@ -1,28 +1,33 @@
 import { BaseCard, BaseWrapper } from "binak-react-components";
-import { FC, RefObject, useCallback, useEffect, useRef, useState } from "react";
-import { PassRecord } from "../../models/record";
+import { FC, useCallback, useEffect, useState } from "react";
+import { VehicleInside } from "../../models/vehicleInside";
+import VehiclesInsideItem from "./VehiclesInsideItem";
 import { bounce } from "../../utils/animationVariants";
 import useLoading from "../../hooks/useLoading";
 import useError from "../../hooks/useError";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Paginator from "../ui/Paginator";
+import CheckInVehicle from "./CheckInVehicle";
+import FilterVehiclesInside from "./FilterVehiclesInside";
 import { useTranslation } from "react-i18next";
-import RecordItem from "./RecordItem";
-import FilterRecords from "./FilterRecords";
+import TabButtons from "../ui/TabButtons";
 import useUrls from "../../hooks/useUrls";
 
-const ListRecords: FC = () => {
-  const [records, setRecords] = useState<PassRecord[]>([]);
-  const [showDate, setShowDate] = useState(true);
-
-  const scroollTargetRef = useRef(null);
+const ListVehiclesInside: FC = () => {
+  const [vehicleInside, setVehiclesInside] = useState<VehicleInside[]>([]);
 
   const { t } = useTranslation();
   const loading = useSelector((state: RootState) => state.loading.loading);
 
+  const [mode, setMode] = useState<"checkIn" | "search">("search");
+
+  const modes = [
+    { name: "checkIn", buttonText: t("Check In Vehicle") },
+    { name: "search", buttonText: t("Search") },
+  ];
+
   const [filter, setFilter] = useState("");
-  const [date, setDate] = useState("");
 
   const { setLoading } = useLoading();
   const { setError } = useError();
@@ -41,9 +46,8 @@ const ListRecords: FC = () => {
 
     try {
       const response = await fetch(
-        url("listRecords", {
+        url("listVehiclesInside", {
           filter,
-          date,
           page: currentPage.toString(),
         }),
         {
@@ -55,17 +59,15 @@ const ListRecords: FC = () => {
       const responseData = await response.json();
 
       if (response.status === 200) {
-        const recordsWithKey = responseData.records.map(
-          (record: any, index: number) => ({
-            ...record,
+        const vehiclesInsideWithKey = responseData.vehicles.map(
+          (vehicle: any, index: number) => ({
+            ...vehicle,
             key: `${Date.now()}_${index}`,
           })
         );
-
-        setRecords(recordsWithKey);
+        setVehiclesInside(vehiclesInsideWithKey);
         setCurrentPage(responseData.currentPage);
         setTotalPages(responseData.totalPages);
-        setShowDate(!date);
       } else {
         throw new Error(responseData.message);
       }
@@ -78,11 +80,6 @@ const ListRecords: FC = () => {
 
   const refetchData = () => {
     setRefetchCounter(refetchCounter + 1);
-    const top = (scroollTargetRef as RefObject<any>).current.offsetTop || 0;
-    window.scrollTo({
-      top: top,
-      behavior: "auto",
-    });
   };
 
   useEffect(() => {
@@ -92,21 +89,24 @@ const ListRecords: FC = () => {
   return (
     <>
       <BaseCard>
+        <TabButtons modes={modes} setMode={setMode} currentMode={mode} />
         <BaseWrapper style={{ minWidth: "20rem" }}>
-          <FilterRecords
-            initialDate={date}
-            setFilter={(data) => {
-              setFilter(data.filter);
-              setDate(data.date);
-              setCurrentPage(0);
-              refetchData();
-            }}
+          <CheckInVehicle
+            refetch={refetchData}
+            setCurrentPage={setCurrentPage}
+            mode={mode}
           />
+
+          {mode === "search" && (
+            <FilterVehiclesInside
+              setFilter={(val) => {
+                setFilter(val);
+                setCurrentPage(0);
+              }}
+            />
+          )}
         </BaseWrapper>
       </BaseCard>
-
-      <div ref={scroollTargetRef}></div>
-
       <BaseWrapper
         mode={["center"]}
         style={{
@@ -116,20 +116,20 @@ const ListRecords: FC = () => {
           maxWidth: "60rem",
         }}
       >
-        {records.map((record: PassRecord) => (
-          <RecordItem
+        {vehicleInside.map((vehicleInside: VehicleInside) => (
+          <VehiclesInsideItem
+            whileHover={bounce.s.scale}
             transition={bounce.m.transition}
-            key={record.key}
-            record={record}
-            showDate={showDate}
+            key={vehicleInside.key}
+            vehicleInside={vehicleInside}
+            refetch={refetchData}
           />
         ))}
       </BaseWrapper>
-      {!loading && records.length === 0 && (
-        <BaseCard style={{ marginTop: "-1rem" }}>
-          {t("No records found")}
-        </BaseCard>
+      {!loading && vehicleInside.length === 0 && (
+        <BaseCard style={{ marginTop: "-1rem" }}>{t("No vehicles.")}</BaseCard>
       )}
+
       {totalPages > 1 && (
         <Paginator
           setCurrentPage={setCurrentPage}
@@ -142,4 +142,4 @@ const ListRecords: FC = () => {
   );
 };
 
-export default ListRecords;
+export default ListVehiclesInside;

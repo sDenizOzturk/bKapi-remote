@@ -1,18 +1,18 @@
-import { useSelector } from 'react-redux';
-import { useNavigate, NavLink, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useSelector } from "react-redux";
+import { useNavigate, NavLink, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import { CSSProperties, FC } from 'react';
-import { RootState } from '../../store';
-import { isTokenValid } from '../../utils/utils';
-import { useMediaQuery } from 'usehooks-ts';
-import { BaseHeader, headerActiveStyle } from 'binak-react-components';
-import useRoutes from '../../hooks/useRoutes';
+import { CSSProperties, FC } from "react";
+import { RootState } from "../../store";
+import { isTokenValid } from "../../utils/utils";
+import { useMediaQuery } from "usehooks-ts";
+import { BaseHeader, headerActiveStyle } from "binak-react-components";
+import useRoutes from "../../hooks/useRoutes";
 
 const languages = [
-  { lang: 'tr', label: 'Türkçe' },
-  { lang: 'en', label: 'English' },
-  { lang: 'ru', label: 'Русский' },
+  { lang: "tr", label: "Türkçe" },
+  { lang: "en", label: "English" },
+  { lang: "ru", label: "Русский" },
 ];
 
 const Header: FC = () => {
@@ -34,29 +34,25 @@ const Header: FC = () => {
 
   if (tokenValid) {
     displayingRoutes.push({
-      to: route('listLinks'),
-      text: t('Links'),
+      to: route("listVehiclesInside"),
+      text: t("Vehicles Inside"),
     });
     displayingRoutes.push({
-      to: route('listHouseholds'),
-      text: t('Households'),
+      to: route("listHouseholds"),
+      text: t("Households"),
     });
     displayingRoutes.push({
-      to: route('records'),
-      text: t('Records'),
+      to: route("records"),
+      text: t("Records"),
     });
   } else {
     displayingRoutes.push({
-      to: route('auth'),
-      text: t('Log In'),
-    });
-    displayingRoutes.push({
-      to: route('instructions'),
-      text: t('Instructions'),
+      to: route("auth"),
+      text: t("Log In"),
     });
   }
 
-  const isPortrait = useMediaQuery('(orientation: portrait)');
+  const isPortrait = useMediaQuery("(orientation: portrait)");
 
   return (
     <BaseHeader
@@ -75,10 +71,10 @@ const Header: FC = () => {
         </>
       }
       rightContent={languages.map((language) => {
-        let style: CSSProperties = { fontSize: '0.8rem' };
+        let style: CSSProperties = { fontSize: "0.8rem" };
 
         if (isPortrait) {
-          style = { ...style, padding: '0.5rem', margin: '0' };
+          style = { ...style, padding: "0.5rem", margin: "0" };
         }
         if (i18n.language === language.lang) {
           style = { ...style, ...headerActiveStyle };
@@ -89,7 +85,7 @@ const Header: FC = () => {
               style={style}
               onClick={() => {
                 i18n.changeLanguage(language.lang);
-                localStorage.setItem('language', language.lang);
+                localStorage.setItem("language", language.lang);
                 navigate(0);
               }}
             >

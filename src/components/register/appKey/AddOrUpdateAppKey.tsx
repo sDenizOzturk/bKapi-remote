@@ -1,23 +1,23 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import {
   BaseWrapper,
   BaseCard,
   BaseButton,
   BaseFormInput,
-} from 'binak-react-components';
-import { useForm } from 'react-hook-form';
+} from "binak-react-components";
+import { useForm } from "react-hook-form";
 
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC } from "react";
 
-import useError from '../../../hooks/useError';
-import useLoading from '../../../hooks/useLoading';
-import { AppKey } from '../../../models/appKey';
-import { UserType } from '../../../models/userType';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { RootState } from '../../../store';
-import useUrls from '../../../hooks/useUrls';
+import useError from "../../../hooks/useError";
+import useLoading from "../../../hooks/useLoading";
+import { AppKey } from "../../../models/appKey";
+import { UserType } from "../../../models/userType";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { RootState } from "../../../store";
+import useUrls from "../../../hooks/useUrls";
 
 interface AddOrUpdateAppKeyProps {
   update?: boolean;
@@ -36,9 +36,9 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  let token = '';
-  let doorNumber = '';
-  if (userType === 'admin') {
+  let token = "";
+  let doorNumber = "";
+  if (userType === "admin") {
     token = useSelector((state: RootState) => state.auth.token).token;
     doorNumber = useParams().doorNumber as string;
   } else {
@@ -60,7 +60,7 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<AppKey>({
-    mode: 'onTouched',
+    mode: "onTouched",
     defaultValues: defaultVaules(),
   });
 
@@ -68,25 +68,25 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
     setLoading(true);
     try {
       const headers = {
-        Authorization: 'Bearer ' + token,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Authorization: "Bearer " + token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
         UserType: userType,
       };
       const body = JSON.stringify(data);
 
       const _url = update
-        ? url('updateAppKey') + targetAppKey!.fullname
-        : url('postAppKey') +
+        ? url("updateAppKey") + targetAppKey!.fullname
+        : url("postAppKey") +
           (doorNumber
-            ? '?' +
+            ? "?" +
               new URLSearchParams({
                 doorNumber,
               })
-            : '');
+            : "");
 
       const response = await fetch(_url, {
-        method: update ? 'PUT' : 'POST',
+        method: update ? "PUT" : "POST",
         headers,
         body,
       });
@@ -100,49 +100,49 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
       }
     } catch (err: any) {
       console.log(err);
-      setError(err.message || 'Failed, try later.');
+      setError(err.message || "Failed, try later.");
     }
     setLoading(false);
   };
 
   return (
-    <BaseWrapper mode={['vertical']}>
-      <BaseCard style={{ maxWidth: '18rem', margin: '0' }}>
+    <BaseWrapper mode={["vertical"]}>
+      <BaseCard style={{ maxWidth: "18rem", margin: "0" }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <BaseFormInput
             id="fullname"
-            label={t('Users Fullname')}
+            label={t("Users Fullname")}
             error={errors.fullname}
-            register={register('fullname', {
+            register={register("fullname", {
               required: true,
               minLength: 6,
             })}
-            errorMessage={t('Please enter a valid fullname')}
+            errorMessage={t("Please enter a valid fullname")}
           />
           <BaseFormInput
             id="appKey"
-            label={t('Application Key')}
+            label={t("Application Key")}
             error={errors.appKey}
-            register={register('appKey', {
+            register={register("appKey", {
               required: true,
               minLength: 6,
               maxLength: 6,
             })}
             onInput={(e: ChangeEvent<HTMLInputElement>) =>
-              (e.target.value = ('' + e.target.value)
+              (e.target.value = ("" + e.target.value)
                 .toLowerCase()
-                .replace(' ', ''))
+                .replace(" ", ""))
             }
-            errorMessage={t('Please enter a valid application key')}
+            errorMessage={t("Please enter a valid application key")}
           />
           <BaseFormInput
-            id="phoneNumber"
-            label={t('Contact Number')}
-            register={register('phoneNumber')}
+            id="info"
+            label={t("Additional Information")}
+            register={register("info")}
           />
-          <BaseWrapper mode={['align-right']}>
+          <BaseWrapper mode={["align-right"]}>
             <BaseButton type="submit">
-              {update ? t('Edit') : t('Add')}
+              {update ? t("Edit") : t("Add")}
             </BaseButton>
             {update && setAskedForDelete && (
               <BaseButton
@@ -150,7 +150,7 @@ const AddOrUpdateAppKey: FC<AddOrUpdateAppKeyProps> = ({
                 mode="outline"
                 onClick={setAskedForDelete}
               >
-                {t('Delete')}
+                {t("Delete")}
               </BaseButton>
             )}
           </BaseWrapper>

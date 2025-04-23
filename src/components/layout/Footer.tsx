@@ -1,14 +1,14 @@
-import logoImage from '../../assets/logo.webp';
-import { NavLink, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import logoImage from "../../assets/logo.webp";
+import { NavLink, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
-import { authActions } from '../../store/auth';
-import { FC } from 'react';
-import { RootState } from '../../store';
-import { isTokenValid } from '../../utils/utils';
-import { BaseFooter } from 'binak-react-components';
-import useRoutes from '../../hooks/useRoutes';
+import { authActions } from "../../store/auth";
+import { FC } from "react";
+import { RootState } from "../../store";
+import { isTokenValid } from "../../utils/utils";
+import { BaseFooter } from "binak-react-components";
+import useRoutes from "../../hooks/useRoutes";
 
 const Footer: FC = () => {
   const { t } = useTranslation();
@@ -28,21 +28,21 @@ const Footer: FC = () => {
         <>
           {tokenValid && (
             <NavLink
-              to={route('auth')}
+              to={route("auth")}
               onClick={() => dispatch(authActions.logout())}
             >
-              {t('Log Out')}
+              {t("Log Out")}
             </NavLink>
           )}
           <NavLink to="/" onClick={() => dispatch(authActions.logout())}>
-            {t('Home Page')}
+            {t("Home Page")}
           </NavLink>
         </>
       }
       rightContent={
         <a
-          style={{ border: 'none' }}
-          href="https://binakybs.com"
+          style={{ border: "none" }}
+          href="https://binak.com.tr"
           target="_blank"
           rel="noreferrer"
         >

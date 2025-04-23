@@ -5,35 +5,31 @@ import {
   BaseModal,
   BaseCard,
 } from "binak-react-components";
-import AddOrUpdatePlate from "./AddOrUpdatePlate";
+import AddOrUpdateContactNumber from "./AddOrUpdateContactNumber";
 import { useTranslation } from "react-i18next";
-
-import PlateItem from "./PlateItem";
+import ContactNumberItem from "./ContactNumberItem";
 import useError from "../../../hooks/useError";
-import { Plate } from "../../../models/plate";
+import { ContactNumber } from "../../../models/contactNumber";
 import { bounce } from "../../../utils/animationVariants";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { UserType } from "../../../models/userType";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import useRoutes from "../../../hooks/useRoutes";
 import useUrls from "../../../hooks/useUrls";
 
-interface ListPlatesProps {
-  plateType: "own" | "guest";
+interface ListContactNumbersProps {
+  numberType: "telegram" | "sms";
   userType: UserType;
-  setLoading: (arg0: boolean) => any;
+  setLoading: (value: boolean) => void;
 }
 
-const ListPlates: FC<ListPlatesProps> = ({
-  plateType,
+const ListContactNumbers: FC<ListContactNumbersProps> = ({
+  numberType,
   userType,
   setLoading,
 }) => {
   const { t } = useTranslation();
   const loading = useSelector((state: RootState) => state.loading.loading);
-
   const { url } = useUrls();
 
   let token = "";
@@ -46,29 +42,19 @@ const ListPlates: FC<ListPlatesProps> = ({
   }
 
   const { setError, setErrors } = useError();
-
-  const [showAddPlate, setShowAddPlate] = useState(false);
-  const [updatingPlate, setUpdatingPlate] = useState<Plate>();
-
-  const [plates, setPlates] = useState<Plate[]>([]);
-
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [updatingContact, setUpdatingContact] = useState<ContactNumber>();
+  const [contacts, setContacts] = useState<ContactNumber[]>([]);
   const navigate = useNavigate();
-
-  const { route } = useRoutes();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-
     try {
       const _url =
-        (plateType === "own" ? url("listOwnPlates") : url("listGuestPlates")) +
-        (doorNumber
-          ? "?" +
-            new URLSearchParams({
-              doorNumber,
-            })
-          : "");
-
+        (numberType === "telegram"
+          ? url("listTelegramNumbers")
+          : url("listSmsNumbers")) +
+        (doorNumber ? "?" + new URLSearchParams({ doorNumber }) : "");
       const response = await fetch(_url, {
         headers: {
           Authorization: "Bearer " + token,
@@ -76,9 +62,8 @@ const ListPlates: FC<ListPlatesProps> = ({
         },
       });
       const responseData = await response.json();
-
       if (response.status === 200) {
-        setPlates(responseData.plates);
+        setContacts(responseData.numbers);
       } else {
         throw new Error(responseData.message);
       }
@@ -87,36 +72,33 @@ const ListPlates: FC<ListPlatesProps> = ({
       navigate("/");
     }
     setLoading(false);
-  }, [plateType, setError, setLoading, token]);
+  }, [numberType, setError, setLoading, token, doorNumber]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  const [askedForDelete, setAskedForDelete] = useState<Plate | undefined>(
-    undefined
-  );
+  const [askedForDelete, setAskedForDelete] = useState<
+    ContactNumber | undefined
+  >(undefined);
 
-  const deletePlate = async () => {
+  const deleteContact = async () => {
     setLoading(true);
     try {
       const _url =
-        (plateType === "own"
-          ? url("deleteOwnPlate")
-          : url("deleteGuestPlate")) +
-        askedForDelete?.plateNumber +
-        (doorNumber
-          ? "?" +
-            new URLSearchParams({
-              doorNumber,
-            })
-          : "");
+        (numberType === "telegram"
+          ? url("deleteTelegramNumber")
+          : url("deleteSmsNumber")) +
+        askedForDelete?.number +
+        (doorNumber ? "?" + new URLSearchParams({ doorNumber }) : "");
       const response = await fetch(_url, {
         method: "DELETE",
-        headers: { Authorization: "Bearer " + token, UserType: userType },
+        headers: {
+          Authorization: "Bearer " + token,
+          UserType: userType,
+        },
       });
       const responseData = await response.json();
-
       if (response.status === 200) {
         fetchData();
       } else {
@@ -124,7 +106,6 @@ const ListPlates: FC<ListPlatesProps> = ({
         throw new Error(responseData.message);
       }
     } catch (err: any) {
-      console.log(err);
       setError(err.message || "Failed, try later.");
     }
     setAskedForDelete(undefined);
@@ -135,13 +116,13 @@ const ListPlates: FC<ListPlatesProps> = ({
     <>
       <BaseModal
         center
-        open={showAddPlate}
-        onClose={() => setShowAddPlate(false)}
+        open={showAddContact}
+        onClose={() => setShowAddContact(false)}
       >
-        <AddOrUpdatePlate
-          plateType={plateType}
+        <AddOrUpdateContactNumber
+          numberType={numberType}
           refetch={() => {
-            setShowAddPlate(false);
+            setShowAddContact(false);
             fetchData();
           }}
           userType={userType}
@@ -150,21 +131,21 @@ const ListPlates: FC<ListPlatesProps> = ({
 
       <BaseModal
         center
-        open={!!updatingPlate}
-        onClose={() => setUpdatingPlate(undefined)}
+        open={!!updatingContact}
+        onClose={() => setUpdatingContact(undefined)}
       >
-        <AddOrUpdatePlate
-          plateType={plateType}
+        <AddOrUpdateContactNumber
+          numberType={numberType}
           update
-          targetPlate={updatingPlate}
+          targetContact={updatingContact}
           refetch={() => {
-            setUpdatingPlate(undefined);
+            setUpdatingContact(undefined);
             fetchData();
           }}
           userType={userType}
           setAskedForDelete={() => {
-            setAskedForDelete(updatingPlate);
-            setUpdatingPlate(undefined);
+            setAskedForDelete(updatingContact);
+            setUpdatingContact(undefined);
           }}
         />
       </BaseModal>
@@ -172,11 +153,9 @@ const ListPlates: FC<ListPlatesProps> = ({
       <BaseWrapper mode={["vertical", "center"]}>
         <BaseWrapper mode={["horizontal"]}>
           <h1>
-            {plateType === "own"
-              ? t("Residents' Vehicles")
-              : t("Guests' Vehicles")}
+            {numberType === "telegram" ? t("Telegram IDs") : t("SMS Numbers")}
           </h1>
-          <BaseButton mode="outline" onClick={() => setShowAddPlate(true)}>
+          <BaseButton mode="outline" onClick={() => setShowAddContact(true)}>
             {t("Add")}
           </BaseButton>
         </BaseWrapper>
@@ -191,27 +170,30 @@ const ListPlates: FC<ListPlatesProps> = ({
           maxWidth: "40rem",
         }}
       >
-        {plates.map((plate: Plate) => (
-          <PlateItem
+        {contacts.map((contact: ContactNumber) => (
+          <ContactNumberItem
             whileHover={bounce.s.scale}
             transition={bounce.m.transition}
-            key={plate.plateNumber}
-            plate={plate}
-            onPlateClicked={() => setUpdatingPlate(plate)}
-            onDeleteKeyClicked={() => setAskedForDelete(plate)}
+            key={contact.number}
+            contact={contact}
+            onContactClicked={() => setUpdatingContact(contact)}
+            onDeleteContactClicked={() => setAskedForDelete(contact)}
           />
         ))}
-
-        {!loading && plates.length === 0 && (
+        {!loading && contacts.length === 0 && (
           <BaseCard style={{ margin: "-0.5rem" }}>
-            {t("No vehicles added")}
+            {numberType === "telegram"
+              ? t("No IDs added")
+              : t("No numbers added")}
           </BaseCard>
         )}
       </BaseWrapper>
 
       <BaseModal
         open={!!askedForDelete}
-        title={t("Deleting Plate...")}
+        title={
+          numberType === "telegram" ? t("Deleting ID") : t("Deleting Number")
+        }
         center
         baseDialog
         onClose={() => setAskedForDelete(undefined)}
@@ -223,14 +205,18 @@ const ListPlates: FC<ListPlatesProps> = ({
             >
               {t("No")}
             </BaseButton>
-            <BaseButton onClick={deletePlate}>{t("Yes")}</BaseButton>
+            <BaseButton onClick={deleteContact}>{t("Yes")}</BaseButton>
           </>
         }
       >
-        <h2>{t("Are you sure to delete this plate?")}</h2>
-        <BaseWrapper mode={["align-right"]}></BaseWrapper>
+        <h2>
+          {numberType === "telegram"
+            ? t("Are you sure you want to delete this ID?")
+            : t("Are you sure you want to delete this number?")}
+        </h2>
       </BaseModal>
     </>
   );
 };
-export default ListPlates;
+
+export default ListContactNumbers;

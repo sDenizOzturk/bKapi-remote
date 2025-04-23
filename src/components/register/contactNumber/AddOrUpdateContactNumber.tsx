@@ -1,43 +1,39 @@
 import { useTranslation } from "react-i18next";
-
 import {
   BaseWrapper,
   BaseCard,
   BaseButton,
   BaseFormInput,
 } from "binak-react-components";
-
 import { useForm } from "react-hook-form";
 import { ChangeEvent, FC } from "react";
-
 import useError from "../../../hooks/useError";
 import useLoading from "../../../hooks/useLoading";
-import { Plate } from "../../../models/plate";
+import { ContactNumber } from "../../../models/contactNumber";
 import { UserType } from "../../../models/userType";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { useParams } from "react-router-dom";
 import useUrls from "../../../hooks/useUrls";
 
-interface AddOrUpdatePlateProps {
-  plateType: "own" | "guest";
+interface AddOrUpdateContactNumberProps {
+  numberType: "telegram" | "sms";
   update?: boolean;
-  targetPlate?: Plate;
+  targetContact?: ContactNumber;
   refetch: () => void;
   userType: UserType;
   setAskedForDelete?: () => void;
 }
 
-const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
-  plateType,
+const AddOrUpdateContactNumber: FC<AddOrUpdateContactNumberProps> = ({
+  numberType,
   update,
-  targetPlate,
+  targetContact,
   refetch,
   userType,
   setAskedForDelete,
 }) => {
   const { t } = useTranslation();
-
   const { url } = useUrls();
 
   let token = "";
@@ -52,35 +48,33 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
   const { setError, setErrors } = useError();
   const { setLoading } = useLoading();
 
-  const defaultVaules = () => {
+  const defaultValues = () => {
     if (!update) return {};
-    return targetPlate;
+    return targetContact;
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Plate>({
+  } = useForm<ContactNumber>({
     mode: "onTouched",
-    defaultValues: defaultVaules(),
+    defaultValues: defaultValues(),
   });
 
   const targetUrl = () => {
-    if (plateType === "own") {
+    if (numberType === "telegram") {
       return update
-        ? url("updateOwnPlate") + targetPlate!.plateNumber
-        : url("postOwnPlate");
-    } else if (plateType === "guest") {
+        ? url("updateTelegramNumber") + targetContact!.number
+        : url("postTelegramNumber");
+    } else {
       return update
-        ? url("updateGuestPlate") + targetPlate!.plateNumber
-        : url("postGuestPlate");
+        ? url("updateSmsNumber") + targetContact!.number
+        : url("postSmsNumber");
     }
-    new Error("unkown plate type!");
-    return "";
   };
 
-  const onSubmit = async (data: Plate) => {
+  const onSubmit = async (data: ContactNumber) => {
     setLoading(true);
     try {
       const headers = {
@@ -91,16 +85,11 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
       };
 
       const body = JSON.stringify(data);
-      const url =
+      const requestUrl =
         targetUrl() +
-        (doorNumber
-          ? "?" +
-            new URLSearchParams({
-              doorNumber,
-            })
-          : "");
+        (doorNumber ? "?" + new URLSearchParams({ doorNumber }) : "");
 
-      const response = await fetch(url, {
+      const response = await fetch(requestUrl, {
         method: update ? "PUT" : "POST",
         headers,
         body,
@@ -114,7 +103,6 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
         throw new Error(responseData.message);
       }
     } catch (err: any) {
-      console.log(err);
       setError(err.message || "Failed, try later.");
     }
     setLoading(false);
@@ -126,7 +114,7 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <BaseFormInput
             id="fullname"
-            label={t("Drivers Fullname")}
+            label={t("Users Fullname")}
             error={errors.fullname}
             register={register("fullname", {
               required: true,
@@ -135,23 +123,23 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
             errorMessage={t("Please enter a valid fullname")}
           />
           <BaseFormInput
-            id="plateNumber"
-            label={t("Plate Number")}
-            error={errors.plateNumber}
-            register={register("plateNumber", {
+            id="number"
+            label={
+              numberType === "telegram" ? t("Telegram ID") : t("SMS Number")
+            }
+            error={errors.number}
+            register={register("number", {
               required: true,
               minLength: 5,
-              validate: (value) => !value.includes(" "),
             })}
             onInput={(e: ChangeEvent<HTMLInputElement>) =>
-              (e.target.value = ("" + e.target.value).toUpperCase())
+              (e.target.value = e.target.value.toUpperCase())
             }
-            errorMessage={t("Please enter a valid plate number")}
-          />
-          <BaseFormInput
-            id="info"
-            label={t("Additional Information")}
-            register={register("info")}
+            errorMessage={
+              numberType === "telegram"
+                ? t("Please enter a valid ID")
+                : t("Please enter a valid number")
+            }
           />
           <BaseWrapper mode={["align-right"]}>
             <BaseButton type="submit">
@@ -172,4 +160,5 @@ const AddOrUpdatePlate: FC<AddOrUpdatePlateProps> = ({
     </BaseWrapper>
   );
 };
-export default AddOrUpdatePlate;
+
+export default AddOrUpdateContactNumber;

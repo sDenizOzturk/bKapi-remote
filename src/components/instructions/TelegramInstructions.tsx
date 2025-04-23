@@ -1,11 +1,11 @@
-import { BaseWrapper, BaseCard } from 'binak-react-components';
-import classes from './Instructions.module.css';
+import { BaseWrapper, BaseCard } from "binak-react-components";
+import classes from "./Instructions.module.css";
 
-import logo_appstore from '../../assets/logo_appstore.webp';
-import logo_playstore from '../../assets/logo_playstore.webp';
-import { useTranslation } from 'react-i18next';
-import { FC, ReactNode } from 'react';
-import { Instructions } from '../../models/instructions';
+import logo_appstore from "../../assets/logo_appstore.webp";
+import logo_playstore from "../../assets/logo_playstore.webp";
+import { useTranslation } from "react-i18next";
+import { FC, ReactNode } from "react";
+import { Instructions } from "../../models/instructions";
 
 interface TelegramInstructionsProps {
   instructions: Instructions;
@@ -16,26 +16,25 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
 }) => {
   const { i18n } = useTranslation();
 
-  const telegramBotName = instructions ? instructions.telegramBotName : 'Error';
+  const telegramBotName = instructions ? instructions.telegramBotName : "Error";
 
   const content: Record<string, ReactNode> = {
     tr: (
       <>
-        <h1 className={classes.h1}>Telegram ID&apos;si nedir, nasıl alınır?</h1>
+        <h1 className={classes.h1}>Telegram ID nedir ve nasıl alınır?</h1>
         <ol className={classes.ol}>
           <li className={classes.li}>
-            Araç geçişi sırasında, Telegram uygulaması üzerinden aracın
-            görüntüsü ile birlikte bir bilgilendirme mesajı
-            gönderilebilmektedir.
+            Aracınız geçtiğinde, görseliyle birlikte bir mesaj yalnızca kayıtlı
+            Telegram numaralarınıza gönderilir.
           </li>
           <li className={classes.li}>
-            Bunun için cihazınıza özel bir ID&apos;nin sisteme kaydedilmiş
-            olması gerekmektedir.
+            Bunun için, cihazınıza ait benzersiz bir ID sistemde
+            kaydedilmelidir.
           </li>
           <li className={classes.li}>
-            Telegram uygulamasını telefonunuza indiriniz:
-            <BaseWrapper mode={['horizontal', 'center']}>
-              <BaseWrapper mode={['horizontal', 'center']}>
+            Telegram uygulamasını cep telefonunuza indirin:
+            <BaseWrapper mode={["horizontal", "center"]}>
+              <BaseWrapper mode={["horizontal", "center"]}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/us/app/telegram-messenger/id686449807"
@@ -56,25 +55,20 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
             </BaseWrapper>
           </li>
           <li className={classes.li}>
-            Uygulamayı açınız. Arama bölümüne &quot;{telegramBotName}&quot;
-            yazınız, ardından bu isimdeki kullanıcı ekranda belirecektir,
-            üzerine tıklayarak mesajlaşma ekranını açınız.
+            Uygulamayı açın. Arama alanına &quot;{telegramBotName}&quot; yazın.
+            Bot sonuçlarda görünecektir — üzerine tıklayarak mesajlaşma ekranını
+            açın.
           </li>
-
           <li className={classes.li}>
-            Ekranın altında bulunan &quot;BAŞLAT&quot; butonuna tıklayıp botu
-            aktif hale getiriniz.
+            Ekranın altındaki <strong>Başlat</strong> butonuna tıklayarak botu
+            aktif edin.
           </li>
-
           <li className={classes.li}>
-            Tırnak işaretleri olmadan &quot;id&quot; yazıp gönderiniz. Bot size
-            özel ID&apos;nizi cevap olarak gönderecektir. Bu ID&apos;yi, üstte
-            bulunan bölümlerde plaka eklerken ilgili bölümlere giriniz.
+            Tırnaksız olarak &quot;id&quot; yazıp gönderin. Bot size benzersiz
+            ID’nizi cevap olarak gönderecektir.
           </li>
-
           <li className={classes.li}>
-            Aynı plaka numarası için birden fazla ID ekleyecekseniz
-            ID&apos;lerin aralarına virgül (&apos;,&apos;) koyunuz.
+            Bu ID’yi yukarıdaki Telegram ID alanına girin.
           </li>
         </ol>
       </>
@@ -84,17 +78,17 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
         <h1 className={classes.h1}>What is Telegram ID and how to get it?</h1>
         <ol className={classes.ol}>
           <li className={classes.li}>
-            While the vehicle is passing, an informational message can be sent
-            with the image of the vehicle via Telegram application.
+            When your vehicle passes, a notification with its image is sent via
+            Telegram only to your registered Telegram numbers.
           </li>
           <li className={classes.li}>
-            For this, a unique ID for your device must be registered in the
+            To do this, you must register a unique ID for your device in the
             system.
           </li>
           <li className={classes.li}>
             Download the Telegram application to your mobile phone:
-            <BaseWrapper mode={['horizontal', 'center']}>
-              <BaseWrapper mode={['horizontal', 'center']}>
+            <BaseWrapper mode={["horizontal", "center"]}>
+              <BaseWrapper mode={["horizontal", "center"]}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/us/app/telegram-messenger/id686449807"
@@ -116,24 +110,19 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
           </li>
           <li className={classes.li}>
             Open the application. Type &quot;{telegramBotName}&quot; in the
-            search field, then the user with this name will appear on the
-            screen, click on it to open the messaging screen.
+            search field. You’ll see the bot in the results — click on it to
+            open the messaging screen.
           </li>
-
           <li className={classes.li}>
-            Click the START button at the bottom of the screen and activate the
-            bot.
+            Click the <strong>Start</strong> button at the bottom of the screen
+            to activate the bot.
           </li>
-
           <li className={classes.li}>
-            Type &quot;id&quot; without quotes and send. The bot will send you
-            your unique ID as a reply. Enter this ID in the relevant sections
-            when adding a license plate in the sections above.
+            Type &quot;id&quot; (without quotes) and send it. The bot will reply
+            with your unique ID.
           </li>
-
           <li className={classes.li}>
-            If you are going to add more than one ID for the same license plate
-            number, type a comma (&quot;,&quot;) between the IDs.
+            Enter this ID in the Telegram ID section above.
           </li>
         </ol>
       </>
@@ -145,18 +134,18 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
         </h1>
         <ol className={classes.ol}>
           <li className={classes.li}>
-            Во время проезда транспортного средства можно отправить
-            информационное сообщение с изображением транспортного средства через
-            приложение Telegram.
+            Когда ваш автомобиль проезжает, уведомление с его изображением
+            отправляется через Telegram только на ваши зарегистрированные номера
+            Telegram.
           </li>
           <li className={classes.li}>
-            Для этого в системе должен быть зарегистрирован уникальный
-            идентификатор вашего устройства.
+            Для этого необходимо зарегистрировать уникальный ID вашего
+            устройства в системе.
           </li>
           <li className={classes.li}>
-            Загрузите приложение Telegram на свой мобильный телефон:
-            <BaseWrapper mode={['horizontal', 'center']}>
-              <BaseWrapper mode={['horizontal', 'center']}>
+            Скачайте приложение Telegram на свой мобильный телефон:
+            <BaseWrapper mode={["horizontal", "center"]}>
+              <BaseWrapper mode={["horizontal", "center"]}>
                 <a
                   className={classes.a}
                   href="https://apps.apple.com/us/app/telegram-messenger/id686449807"
@@ -177,26 +166,20 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
             </BaseWrapper>
           </li>
           <li className={classes.li}>
-            Откройте приложение. Введите «{telegramBotName}» в поле поиска,
-            после чего на экране появится пользователь с этим именем, нажмите на
-            него, чтобы открыть экран сообщений.
+            Откройте приложение. Введите &quot;{telegramBotName}&quot; в поле
+            поиска. Вы увидите бота в результатах — нажмите на него, чтобы
+            открыть экран сообщений.
           </li>
-
           <li className={classes.li}>
-            Нажмите кнопку СТАРТ внизу экрана и активируйте бота.
+            Нажмите кнопку <strong>Start</strong> внизу экрана, чтобы
+            активировать бота.
           </li>
-
           <li className={classes.li}>
-            Введите «id» без кавычек и отправьте. В ответ бот отправит вам ваш
-            уникальный идентификатор. Введите этот идентификатор в
-            соответствующие разделы при добавлении номерного знака в разделах
-            выше.
+            Напишите &quot;id&quot; (без кавычек) и отправьте. Бот ответит вам
+            вашим уникальным ID.
           </li>
-
           <li className={classes.li}>
-            Если вы собираетесь добавить более одного идентификатора для одного
-            и того же номерного знака, введите запятую («,») между
-            идентификаторами.
+            Введите этот ID в поле Telegram ID выше.
           </li>
         </ol>
       </>
@@ -205,7 +188,7 @@ const TelegramInstructions: FC<TelegramInstructionsProps> = ({
 
   return (
     <BaseCard>
-      <BaseWrapper style={{ paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
+      <BaseWrapper style={{ paddingLeft: "0.5rem", paddingRight: "0.5rem" }}>
         {content[i18n.language] ? content[i18n.language] : content.tr}
       </BaseWrapper>
     </BaseCard>

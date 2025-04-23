@@ -1,7 +1,9 @@
 ul.react-paginate {
   margin-bottom: 1rem;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
+  row-gap: 0.5rem;
   list-style-type: circle;
 
   list-style-type: none;

@@ -3,7 +3,4 @@ export interface Plate {
   doorNumber: string;
   plateNumber: string;
   info: string;
-  phoneNumber: string;
-  smsNumber: string;
-  telegramId: string;
 }
