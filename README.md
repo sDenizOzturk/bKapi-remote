@@ -25,9 +25,11 @@
 - [Bınak React Components](https://github.com/sDenizOzturk/binak-react-components)
 - [React Image Displayer](https://github.com/sDenizOzturk/react-image-displayer)
 
-## Live URL For Test
+## Live URL for Test
 
-https://antasya-remote.bkapi.site/permanent/1600x5ts7f
+You can test the system using the following test instance, just enter **any password** to log in:
+
+🔗 [Test Server Login](https://bkapi.com.tr/test/auth)
 
 ## Getting started
 
